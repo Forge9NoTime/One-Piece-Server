@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-OnePiece.Web-07249EA7-F0BB-43A6-9480-2549EEED1076</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\One-Piece.Data\One-Piece.Data.csproj" />
+    <ProjectReference Include="..\One-Piece.Service\One-Piece.Services.Data.csproj" />
+    <ProjectReference Include="..\OnePiece.Common\OnePiece.Common.csproj" />
+    <ProjectReference Include="..\OnePiece.Web.Infrastructure\OnePiece.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\ViewModels\OnePiece.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

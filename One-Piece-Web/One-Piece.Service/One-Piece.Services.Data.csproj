@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>One_Piece.Service</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\One-Piece.Data\One-Piece.Data.csproj" />
+    <ProjectReference Include="..\OnePiece.Common\OnePiece.Common.csproj" />
+    <ProjectReference Include="..\ViewModels\OnePiece.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
