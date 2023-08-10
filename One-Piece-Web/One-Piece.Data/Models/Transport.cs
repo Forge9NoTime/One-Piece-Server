@@ -18,11 +18,11 @@
         public string LicensePlate { get; set; } = null!;
 
         [ForeignKey("Team")]
-        public Guid TeamId { get; set; }
+        public Guid? TeamId { get; set; }
         public Team? Team { get; set; }
 
         [ForeignKey("Volunteer")]
-        public Guid VolunteerId { get; set; }
+        public Guid? VolunteerId { get; set; }
         public Volunteer? Volunteer { get; set; }
 
     }

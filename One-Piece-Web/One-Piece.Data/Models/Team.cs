@@ -22,7 +22,7 @@
         public TeamType? TeamType { get; set; }
 
         [ForeignKey("Mission")]
-        public Guid MissionId { get; set; }
+        public Guid? MissionId { get; set; }
         public Mission? Mission { get; set; }
 
         public ICollection<Volunteer>? Volunteers { get; set; }
