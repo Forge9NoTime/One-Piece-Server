@@ -27,6 +27,7 @@
 
         public int CurrentPage { get; set; }
 
+        [Display(Name = "Show Missions On Page")]
         public int MissionsPerPage { get; set; }
 
         public int TotalMissionsCount { get; set; }

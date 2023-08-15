@@ -82,9 +82,9 @@
             missionsQuery = queryModel.MissionSorting switch
             {
                 MissionSorting.Newest => missionsQuery
-                .OrderBy(m => m.CreatedOn),
-                MissionSorting.Oldest => missionsQuery
                 .OrderByDescending(m => m.CreatedOn),
+                MissionSorting.Oldest => missionsQuery
+                .OrderBy(m => m.CreatedOn),
                 MissionSorting.ThreatLevelAscending => missionsQuery
                 .OrderBy(m => m.MissionThreatLevelId),
                 MissionSorting.ThreatLevelDescending => missionsQuery
@@ -98,6 +98,7 @@
                 .Take(queryModel.MissionsPerPage)
                 .Select(m => new MissionAllViewModel
                 {
+                    Id = m.Id,
                     Title = m.Title,
                     Location = m.Location,
                     Description = m.Description,

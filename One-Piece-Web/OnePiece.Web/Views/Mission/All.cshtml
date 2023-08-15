@@ -18,6 +18,14 @@
                     }
                 </select>
             </div>
+             <div class="form-group">
+                <label asp-for="MissionsPerPage"></label>
+                <select asp-for="MissionsPerPage" class="form-control">
+                    <option value="0">3</option>
+                    <option value="1">6</option>
+                    <option value="2">9</option>
+                </select>
+            </div>
         </div>
         <div class="form-group col-md-3">
             <label asp-for="SearchString"></label>
