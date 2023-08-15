@@ -22,6 +22,8 @@
             this.dbContext = dbContext;
         }
 
+        
+
         public async Task<IEnumerable<IndexViewModel>> AllMissionsAsync()
         {
             IEnumerable<IndexViewModel> allMissions = await this.dbContext
@@ -111,6 +113,23 @@
                 TotalMissionsCount = totalMissions,
                 Missions = allMissions
             };
+        }
+
+        public async Task<IEnumerable<MissionAllViewModel>> AllByOrganizerIdAsync(string organizerId)
+        {
+            IEnumerable<MissionAllViewModel> allOrganizerMissions = await this.dbContext
+                .Missions
+                .Where(m => m.OrganizerId.ToString() == organizerId)
+                .Select(m => new MissionAllViewModel
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    Location = m.Location,
+                    Description = m.Description,
+                })
+                .ToArrayAsync();
+
+            return allOrganizerMissions;
         }
     }
 }

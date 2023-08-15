@@ -11,5 +11,7 @@
         Task CreateAsync(MissionFormModel formModel, string organizerId);
 
         Task<AllMissionsFilteredAndPagedServiceModel> AllAsync(AllMissionsQueryModel queryModel);
+
+        Task<IEnumerable<MissionAllViewModel>> AllByOrganizerIdAsync(string organizerId);
     }
 }

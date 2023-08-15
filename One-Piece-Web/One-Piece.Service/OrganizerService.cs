@@ -27,5 +27,14 @@
 
             return organizer.Id.ToString();
         }
+
+        public async Task<bool> OrganizerExistsByUserIdAsync(string userId)
+        {
+            bool result = await this.dbContext
+                .Organizers
+                .AnyAsync(v => v.UserId.ToString() == userId);
+
+            return result;
+        }
     }
 }

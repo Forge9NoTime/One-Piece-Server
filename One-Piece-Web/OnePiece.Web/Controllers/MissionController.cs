@@ -119,5 +119,24 @@
 
             return this.RedirectToAction("All", "Mission");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Mine()
+        {
+            List<MissionAllViewModel> myMissions =
+                new List<MissionAllViewModel>();
+
+            string userId = this.User.GetId()!;
+            bool isUserOrganizer = await this.organizerService
+                .OrganizerExistsByUserIdAsync(userId);
+            if (isUserOrganizer)
+            {
+                string organizerId = await this.organizerService.GetOrganizerIdByUserIdAsync(userId);
+
+                myMissions.AddRange(await this.missionService.AllByOrganizerIdAsync(organizerId));
+            }
+
+            return this.View(myMissions);
+        }
     }
 }
