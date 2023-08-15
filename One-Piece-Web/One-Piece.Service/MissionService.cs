@@ -31,6 +31,7 @@
                     Title = m.Title,
                     Location = m.Location,
                     MissionThreatLevel = m.MissionThreatLevel.ToString(),
+                    MissionType = m.MissionType.ToString(),
                     Description = m.Description
                 })
                 .ToArrayAsync();
@@ -38,16 +39,20 @@
             return allMissions;
         }
 
-        //public Task CreateAsync(MissionFormModel formModel)
-        //{
-        //    Mission newMission = new Mission()
-        //    {
-        //        Title = formModel.Title,
-        //        Location = formModel.Location,
-        //        ThreatLevel = formModel.ThreatLevel,
-        //        Description = formModel.Description,
+        public async Task CreateAsync(MissionFormModel formModel, string organizerId)
+        {
+            Mission newMission = new Mission()
+            {
+                Title = formModel.Title,
+                Location = formModel.Location,
+                Description = formModel.Description,
+                MissionThreatLevelId = formModel.MissionThreatLevelId,
+                OrganizerId = Guid.Parse(organizerId),
+                MissionTypeId = formModel.MissionTypeId
+            };
 
-        //    }
-        //}
+            await this.dbContext.Missions.AddAsync(newMission);
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

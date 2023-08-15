@@ -10,6 +10,8 @@
 
         public string MissionThreatLevel { get; set; } = null!;
 
+        public string MissionType { get; set; } = null!;
+
         public string Description { get; set; } = null!;
     }
 }

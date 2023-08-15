@@ -1,11 +1,19 @@
 ﻿namespace OnePiece.Web.ViewModels.Mission
 {
+    using OnePiece.Web.ViewModels.MissionType;
+    using OnePiece.Web.ViewModels.ThreatLevel;
     using System.ComponentModel.DataAnnotations;
 
     using static Common.EntityValidationConstants.Mission;
 
     public class MissionFormModel
     {
+        public MissionFormModel()
+        {
+            this.ThreatLevels = new HashSet<MissionSelectThreatLevelFormModel>();
+            this.MissionTypes = new HashSet<MissionSelectTypeFormModel>();
+        }
+
         [Required]
         [Display(Name = "Title")]
         [StringLength(TitleMaxLenght, MinimumLength = TitleMinLenght)]
@@ -21,8 +29,12 @@
         [StringLength(LocationMaxLenght, MinimumLength = LocationMinLenght)]
         public string Location { get; set; } = null!;
 
-        [Required]
         [Display(Name = "Threat Level")]
-        public string ThreatLevel { get; set; } = null!;
+        public int MissionThreatLevelId { get; set; }
+        public IEnumerable<MissionSelectThreatLevelFormModel> ThreatLevels { get; set; }
+
+        [Display(Name = "Mission Type")]
+        public Guid MissionTypeId { get; set; }
+        public IEnumerable<MissionSelectTypeFormModel> MissionTypes { get; set; }
     }
 }

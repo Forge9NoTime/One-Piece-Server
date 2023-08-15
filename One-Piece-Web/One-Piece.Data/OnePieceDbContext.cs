@@ -26,7 +26,9 @@
         public DbSet<Team> Teams { get; set; }
         public DbSet<TeamType> TeamTypes { get; set; }
         public DbSet<Mission> Missions { get; set; }
+        public DbSet<MissionThreatLevel> MissionThreatLevels { get; set; }
         public DbSet<MissionType> MissionTypes { get; set; }
+        public DbSet<Organizer> Organizers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemType> ItemTypes { get; set; }

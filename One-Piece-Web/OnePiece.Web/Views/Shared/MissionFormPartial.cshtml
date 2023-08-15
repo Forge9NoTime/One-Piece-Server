@@ -21,8 +21,24 @@
                     <span asp-validation-for="Description" class="small textdanger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ThreatLevel"></label>
-                    <input asp-for="ThreatLevel" class="form-control" placeholder="Low danger levels..."><span asp-validation-for="ThreatLevel" class="small textdanger"></span>
+                    <label asp-for="MissionTypeId"></label>
+                    <select asp-for="MissionTypeId" class="form-control">
+                        @foreach (var missionTypes in Model.MissionTypes)
+                        {
+                            <option value="@missionTypes.MissionTypeID">@missionTypes.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="MissionTypeId" class="small textdanger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MissionThreatLevelId"></label>
+                    <select asp-for="MissionThreatLevelId" class="form-control">
+                        @foreach (var threatLevels in Model.ThreatLevels)
+                        {
+                            <option value="@threatLevels.Id">@threatLevels.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="MissionThreatLevelId" class="small textdanger"></span>
                 </div>
                 <div class="text-center">
                     <input class="btn btn-primary mt-3" type="submit" value="Save" />
@@ -30,5 +46,7 @@
             </form>
         </div>
     </div>
-
+    @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 }

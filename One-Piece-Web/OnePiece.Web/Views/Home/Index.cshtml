@@ -20,28 +20,3 @@
         </p>
     </div>
 }
-<div class="mb-5"></div>
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        @for (int i = 0; i < missions.Count(); i++)
-        {
-            var mission = missions[i];
-            <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>
-                        <a class="btn btn-primary" asp-controller="Mission" aspaction="Details"
-                       asp-route-id="@mission.Id"> @mission.Title @mission.Description @mission.Location @mission.MissionThreatLevel</a>
-                    </h5>
-                </div>
-            </div>
-        }
-    </div>
-    <button class="carousel-control-prev" type="button" data-bstarget="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bstarget="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>

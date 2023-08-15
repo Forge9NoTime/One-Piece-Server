@@ -7,6 +7,6 @@
     {
         Task<IEnumerable<IndexViewModel>> AllMissionsAsync();
 
-        //Task CreateAsync(MissionFormModel formModel);
+        Task CreateAsync(MissionFormModel formModel, string organizerId);
     }
 }
