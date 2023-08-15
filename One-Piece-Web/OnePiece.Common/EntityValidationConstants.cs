@@ -50,6 +50,11 @@
             public const int DescriptionMaxLenght = 1000;
         }
 
+        public static class ThreatLevel
+        {
+            public const int NameMaxLenght = 100;
+        }
+
         public static class MissionType
         {
             public const int NameMinLenght = 2;

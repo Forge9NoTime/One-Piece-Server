@@ -6,8 +6,6 @@
 
     using One_Piece.Data.Contracts;
 
-    using One_Piece.Data.Models.Enums;
-
     using static OnePiece.Common.EntityValidationConstants.Mission;
 
     public class Mission : AuditableEntity
@@ -20,8 +18,9 @@
         [MaxLength(LocationMaxLenght)]
         public string Location { get; set; } = null!;
 
-        [Required]
-        public ThreatType ThreatLevel { get; set; }
+        public int MissionThreatLevelId { get; set; }
+
+        public MissionThreatLevel MissionThreatLevel { get; set; } = null!;
 
         [Required]
         [MaxLength(DescriptionMaxLenght)]

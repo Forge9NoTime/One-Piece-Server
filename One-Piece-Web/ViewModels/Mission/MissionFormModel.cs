@@ -1,4 +1,4 @@
-﻿namespace OnePiece.Web.ViewModels.Home.Mission
+﻿namespace OnePiece.Web.ViewModels.Mission
 {
     using System.ComponentModel.DataAnnotations;
 

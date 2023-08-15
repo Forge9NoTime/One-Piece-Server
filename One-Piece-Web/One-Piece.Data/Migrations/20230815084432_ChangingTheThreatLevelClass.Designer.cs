@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using One_Piece.Data;
 
@@ -11,9 +12,11 @@ using One_Piece.Data;
 namespace One_Piece.Data.Migrations
 {
     [DbContext(typeof(OnePieceDbContext))]
-    partial class OnePieceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230815084432_ChangingTheThreatLevelClass")]
+    partial class ChangingTheThreatLevelClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

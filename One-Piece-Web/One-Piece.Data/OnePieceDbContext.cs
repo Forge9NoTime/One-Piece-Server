@@ -7,7 +7,6 @@
     using Microsoft.EntityFrameworkCore;
 
     using Models;
-    using One_Piece.Data.Models.Enums;
 
     public class OnePieceDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
@@ -61,8 +60,6 @@
                 .WithMany(te => te.Transports)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //modelBuilder.Entity<Mission>().HasData(this.GenerateMissions());
-
             //modelBuilder.Entity<MissionType>().HasData(this.GenerateMissionTypes());
 
         }
@@ -80,75 +77,6 @@
             missionTypes.Add(missionType);
 
             return missionTypes.ToArray();
-        }
-
-            private Mission[] GenerateMissions()
-        {
-            ICollection<Mission> missions = new HashSet<Mission>();
-
-            Mission mission;
-
-            mission = new Mission()
-            {
-                Id = Guid.NewGuid(),
-                Title = "Fallen Tree",
-                Location = "Grad Lom, ulica Bluzludja 3",
-                ThreatLevel = ThreatType.Low,
-                Description = "Padnalo durvo zaprechva putq",
-                MissionTypeId = Guid.Parse("67725CB9-9A78-489B-A159-113BCEFCEE03"),
-                OrganizerId = Guid.Parse("CADBC7BC-450A-44D8-AB10-3F110F51929D")
-            };
-            missions.Add(mission);
-
-            mission = new Mission()
-            {
-                Id = Guid.NewGuid(),
-                Title = "Flood",
-                Location = "Grad Lom, ulica Vasil Kolarov",
-                ThreatLevel = ThreatType.Medium,
-                Description = "Ulicata e navodnena, ima mnogo otpaduci na putq",
-                MissionTypeId = Guid.Parse("67725CB9-9A78-489B-A159-113BCEFCEE03"),
-                OrganizerId = Guid.Parse("CADBC7BC-450A-44D8-AB10-3F110F51929D")
-            };
-            missions.Add(mission);
-
-            mission = new Mission()
-            {
-                Id = Guid.NewGuid(),
-                Title = "Strong Wind",
-                Location = "Grad Lom, Tundja 10",
-                ThreatLevel = ThreatType.Low,
-                Description = "Padnalo durvo vurhu kola",
-                MissionTypeId = Guid.Parse("67725CB9-9A78-489B-A159-113BCEFCEE03"),
-                OrganizerId = Guid.Parse("CADBC7BC-450A-44D8-AB10-3F110F51929D")
-            };
-            missions.Add(mission);
-
-            mission = new Mission()
-            {
-                Id = Guid.NewGuid(),
-                Title = "Storm",
-                Location = "Grad Lom, ulica Borunska 3",
-                ThreatLevel = ThreatType.Low,
-                Description = "Pochistvane na plaja sled burq",
-                MissionTypeId = Guid.Parse("67725CB9-9A78-489B-A159-113BCEFCEE03"),
-                OrganizerId = Guid.Parse("CADBC7BC-450A-44D8-AB10-3F110F51929D")
-            };
-            missions.Add(mission);
-
-            mission = new Mission()
-            {
-                Id = Guid.NewGuid(),
-                Title = "Disaster",
-                Location = "Grad Lom, ulica Bluzludja 3",
-                ThreatLevel = ThreatType.Low,
-                Description = "Nqmam internet vtori den A1 ei mamka vi",
-                MissionTypeId = Guid.Parse("67725CB9-9A78-489B-A159-113BCEFCEE03"),
-                OrganizerId = Guid.Parse("CADBC7BC-450A-44D8-AB10-3F110F51929D")
-            };
-            missions.Add(mission);
-
-            return missions.ToArray();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

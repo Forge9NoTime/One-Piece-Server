@@ -8,7 +8,7 @@
         
         public string Location { get; set; } = null!;
 
-        public string ThreatLevel { get; set; } = null!;
+        public string MissionThreatLevel { get; set; } = null!;
 
         public string Description { get; set; } = null!;
     }

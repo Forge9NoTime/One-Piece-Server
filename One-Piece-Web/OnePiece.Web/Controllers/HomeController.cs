@@ -18,7 +18,7 @@
         public async Task<IActionResult> Index()
         {
             IEnumerable<IndexViewModel> viewModel =
-                await this.missionService.LastFiveMissionsAsync();
+                await this.missionService.AllMissionsAsync();
 
             return View(viewModel);
         }
