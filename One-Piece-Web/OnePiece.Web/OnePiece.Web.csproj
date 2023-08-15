@@ -20,6 +20,7 @@
     <ProjectReference Include="..\One-Piece.Data\One-Piece.Data.csproj" />
     <ProjectReference Include="..\One-Piece.Service\One-Piece.Services.Data.csproj" />
     <ProjectReference Include="..\OnePiece.Common\OnePiece.Common.csproj" />
+    <ProjectReference Include="..\OnePiece.Services.Data.Models.Mission\OnePiece.Services.Data.Models.Mission.csproj" />
     <ProjectReference Include="..\OnePiece.Web.Infrastructure\OnePiece.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\ViewModels\OnePiece.Web.ViewModels.csproj" />
   </ItemGroup>

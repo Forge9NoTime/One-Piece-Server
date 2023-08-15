@@ -16,6 +16,16 @@
             this.dbContext = dbContext;
         }
 
+        public async Task<IEnumerable<string>> AllMissionTypeNamesAsync()
+        {
+            IEnumerable<string> allMissionTypeNames = await this.dbContext
+                 .MissionTypes
+                 .Select(mt => mt.TypeName)
+                 .ToArrayAsync();
+
+            return allMissionTypeNames;
+        }
+
         public async Task<IEnumerable<MissionSelectTypeFormModel>> ALlMissionTypesAsync()
         {
             IEnumerable<MissionSelectTypeFormModel> allMissionTypes = await this.dbContext

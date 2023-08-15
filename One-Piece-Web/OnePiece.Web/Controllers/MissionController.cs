@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using One_Piece.Service.Interfaces;
+    using OnePiece.Services.Data.Models.Mission;
     using OnePiece.Web.Infrastructure.Extentions;
     using OnePiece.Web.ViewModels.Mission;
     using static OnePiece.Common.NotificationMessagesConstants;
@@ -26,10 +27,18 @@
             this.organizerService = organizerService;
         }
 
+        [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery]AllMissionsQueryModel queryModel)
         {
-            return this.Ok();
+            AllMissionsFilteredAndPagedServiceModel serviceModel =
+                await this.missionService.AllAsync(queryModel);
+
+
+            queryModel.Missions = serviceModel.Missions;
+            queryModel.TotalMissionsCount = serviceModel.TotalMissionsCount;
+            queryModel.MissionTypes = await this.missionTypeService.AllMissionTypeNamesAsync();
+            return this.View(queryModel);
         }
 
         [HttpGet]

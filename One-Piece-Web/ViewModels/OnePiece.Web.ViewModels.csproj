@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Mission\gczkvasm.wio~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\One-Piece.Data\One-Piece.Data.csproj" />
     <ProjectReference Include="..\OnePiece.Common\OnePiece.Common.csproj" />
   </ItemGroup>
