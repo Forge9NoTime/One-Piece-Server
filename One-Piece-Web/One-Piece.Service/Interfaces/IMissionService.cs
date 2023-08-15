@@ -1,5 +1,6 @@
 ﻿namespace One_Piece.Service.Interfaces
 {
+    using OnePiece.Services.Data.Models.Mission;
     using OnePiece.Web.ViewModels.Home;
     using OnePiece.Web.ViewModels.Mission;
 
@@ -8,5 +9,7 @@
         Task<IEnumerable<IndexViewModel>> AllMissionsAsync();
 
         Task CreateAsync(MissionFormModel formModel, string organizerId);
+
+        Task<AllMissionsFilteredAndPagedServiceModel> AllAsync(AllMissionsQueryModel queryModel);
     }
 }

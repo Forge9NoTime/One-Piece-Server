@@ -7,5 +7,7 @@
         Task<IEnumerable<MissionSelectTypeFormModel>> ALlMissionTypesAsync();
 
         Task<bool> ExistsByIdAsync(Guid id);
+
+        Task<IEnumerable<string>> AllMissionTypeNamesAsync();
     }
 }

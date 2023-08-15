@@ -9,6 +9,8 @@
     using OnePiece.Web.ViewModels.Home;
     using OnePiece.Web.ViewModels.Mission;
     using One_Piece.Data.Models;
+    using OnePiece.Services.Data.Models.Mission;
+    using OnePiece.Web.ViewModels.Mission.Enums;
 
     public class MissionService : IMissionService
     {
@@ -53,6 +55,61 @@
 
             await this.dbContext.Missions.AddAsync(newMission);
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<AllMissionsFilteredAndPagedServiceModel> AllAsync(AllMissionsQueryModel queryModel)
+        {
+            IQueryable<Mission> missionsQuery = this.dbContext
+                .Missions
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(queryModel.MissionType))
+            {
+                missionsQuery = missionsQuery
+                    .Where(m => m.MissionType.TypeName == queryModel.MissionType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryModel.SearchString))
+            {
+                string wildCard = $"%{queryModel.SearchString.ToLower()}%";
+
+                missionsQuery = missionsQuery
+                    .Where(m => EF.Functions.Like(m.Title, wildCard) ||
+                    EF.Functions.Like(m.Location, wildCard) ||
+                    EF.Functions.Like(m.Description, wildCard));
+            }
+
+            missionsQuery = queryModel.MissionSorting switch
+            {
+                MissionSorting.Newest => missionsQuery
+                .OrderBy(m => m.CreatedOn),
+                MissionSorting.Oldest => missionsQuery
+                .OrderByDescending(m => m.CreatedOn),
+                MissionSorting.ThreatLevelAscending => missionsQuery
+                .OrderBy(m => m.MissionThreatLevelId),
+                MissionSorting.ThreatLevelDescending => missionsQuery
+                .OrderByDescending(m => m.MissionThreatLevelId),
+                _ => missionsQuery
+                .OrderByDescending(m => m.CreatedOn)
+            };
+
+            IEnumerable<MissionAllViewModel> allMissions = await missionsQuery
+                .Skip((queryModel.CurrentPage - 1) * queryModel.MissionsPerPage)
+                .Take(queryModel.MissionsPerPage)
+                .Select(m => new MissionAllViewModel
+                {
+                    Title = m.Title,
+                    Location = m.Location,
+                    Description = m.Description,
+                })
+                .ToArrayAsync();
+            int totalMissions = missionsQuery.Count();
+
+            return new AllMissionsFilteredAndPagedServiceModel()
+            {
+                TotalMissionsCount = totalMissions,
+                Missions = allMissions
+            };
         }
     }
 }
