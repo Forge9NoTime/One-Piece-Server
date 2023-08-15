@@ -1,5 +1,6 @@
 ﻿namespace One_Piece.Service.Interfaces
 {
+    using OnePiece.Web.ViewModels.Mission;
     using OnePiece.Web.ViewModels.MissionType;
 
     public interface IMissionTypeService

@@ -11,6 +11,7 @@
     using One_Piece.Data.Models;
     using OnePiece.Services.Data.Models.Mission;
     using OnePiece.Web.ViewModels.Mission.Enums;
+    using System.ComponentModel.DataAnnotations;
 
     public class MissionService : IMissionService
     {
@@ -130,6 +131,34 @@
                 .ToArrayAsync();
 
             return allOrganizerMissions;
+        }
+
+        public async Task<MissionDetailsViewModel> GetDetailsByIdAsync(Guid missionId)
+        {
+            Mission? mission = await this.dbContext
+                .Missions
+                .Include(m => m.MissionType)
+                .Include(m => m.Organizer)
+                .ThenInclude(o => o.User)
+                .FirstOrDefaultAsync(m => m.Id == missionId);
+
+            if(mission == null)
+            {
+                throw new ValidationException();
+            }
+            return new MissionDetailsViewModel
+            {
+               Id = mission.Id,
+               Title = mission.Title,
+               Location = mission.Location,
+               MissionType = mission.MissionType.TypeName,
+               Organizer = new OnePiece.Web.ViewModels.Organizer.OrganizerInfoOnHouseViewModel()
+               {
+                   Email = mission.Organizer.User.Email,
+                   PhoneNumber = mission.Organizer.PhoneNumber
+               }
+
+            };
         }
     }
 }

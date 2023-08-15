@@ -138,5 +138,21 @@
 
             return this.View(myMissions);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            MissionDetailsViewModel viewModel = await this.missionService
+                .GetDetailsByIdAsync(id);
+            if(viewModel == null)
+            {
+                this.TempData[ErrorMessage] = "Mission with the provided id does not exist!";
+
+                return this.RedirectToAction("All", "Mission");
+            }
+
+            return View(viewModel);
+        }
     }
 }

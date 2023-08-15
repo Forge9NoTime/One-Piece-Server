@@ -13,5 +13,7 @@
         Task<AllMissionsFilteredAndPagedServiceModel> AllAsync(AllMissionsQueryModel queryModel);
 
         Task<IEnumerable<MissionAllViewModel>> AllByOrganizerIdAsync(string organizerId);
+
+        Task<MissionDetailsViewModel> GetDetailsByIdAsync(Guid missionId);
     }
 }
