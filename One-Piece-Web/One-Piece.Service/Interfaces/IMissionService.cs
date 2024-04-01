@@ -14,6 +14,12 @@
 
         Task<IEnumerable<MissionAllViewModel>> AllByOrganizerIdAsync(string organizerId);
 
+        Task<bool> ExistsByIdAsync(Guid missionId);
+
         Task<MissionDetailsViewModel> GetDetailsByIdAsync(Guid missionId);
+
+        Task<MissionFormModel> GetMissionForEditByIdAsync(Guid missionId);
+
+        Task<bool> isOrganizerWithIdCreatorOfMissionWithIdAsync(Guid missionId, Guid organizerId);
     }
 }

@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{3CBE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnePiece.Web.Infrastructure", "OnePiece.Web.Infrastructure\OnePiece.Web.Infrastructure.csproj", "{52961936-228B-447C-B530-C509F785366F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnePiece.Services.Data.Models.Mission", "OnePiece.Services.Data.Models.Mission\OnePiece.Services.Data.Models.Mission.csproj", "{31CC0F24-8995-4E5D-A378-3748E94D7A0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnePiece.Services.Data.Models.Mission", "OnePiece.Services.Data.Models.Mission\OnePiece.Services.Data.Models.Mission.csproj", "{31CC0F24-8995-4E5D-A378-3748E94D7A0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

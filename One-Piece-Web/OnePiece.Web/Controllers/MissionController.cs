@@ -143,16 +143,59 @@
         [AllowAnonymous]
         public async Task<IActionResult> Details(Guid id)
         {
-            MissionDetailsViewModel viewModel = await this.missionService
-                .GetDetailsByIdAsync(id);
-            if(viewModel == null)
+            bool missionExists = await this.missionService
+                .ExistsByIdAsync(id);
+            if (!missionExists)
             {
                 this.TempData[ErrorMessage] = "Mission with the provided id does not exist!";
 
                 return this.RedirectToAction("All", "Mission");
             }
 
+            MissionDetailsViewModel viewModel = await this.missionService
+                .GetDetailsByIdAsync(id);
+
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id, MissionFormModel model)
+        {
+            bool missionExists = await this.missionService
+                .ExistsByIdAsync(id);
+            if (!missionExists)
+            {
+                this.TempData[ErrorMessage] = "Mission with the provided id does not exist!";
+
+                return this.RedirectToAction("All", "Mission");
+            }
+
+            bool isUserOrganizer = await this.organizerService
+                .OrganizerExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserOrganizer)
+            {
+                this.TempData[ErrorMessage] = "You must become an organizer to edit house info!";
+
+                return this.RedirectToAction("Become", "Agent");
+            }
+
+            //Guid organizerId =
+            //    await this.organizerService.GetOrganizerIdByUserIdAsync(this.User.GetId()!;
+            //bool isOrganizerCreator = await this.missionService
+            //    .isOrganizerWithIdCreatorOfMissionWithIdAsync(id, organizerId!);
+            //if (!isOrganizerCreator)
+            //{
+            //    this.TempData[ErrorMessage] = "You must be the organizer of the mission you want to edit!";
+
+            //    return this.RedirectToAction("Mine", "Mission");
+            //}
+
+            MissionFormModel formModel = await this.missionService
+                .GetMissionForEditByIdAsync(id);
+            formModel.MissionTypes = await this.missionTypeService.ALlMissionTypesAsync();
+            formModel.ThreatLevels = await this.threatLevelService.ALlThreatLevelsAsync();
+
+            return this.View(formModel);
         }
     }
 }

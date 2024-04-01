@@ -140,12 +140,8 @@
                 .Include(m => m.MissionType)
                 .Include(m => m.Organizer)
                 .ThenInclude(o => o.User)
-                .FirstOrDefaultAsync(m => m.Id == missionId);
+                .FirstAsync(m => m.Id == missionId);
 
-            if(mission == null)
-            {
-                throw new ValidationException();
-            }
             return new MissionDetailsViewModel
             {
                Id = mission.Id,
@@ -159,6 +155,41 @@
                }
 
             };
+        }
+
+        public async Task<bool> ExistsByIdAsync(Guid missionId)
+        {
+            bool result = await this.dbContext
+                .Missions
+                .AnyAsync(m => m.Id == missionId);
+
+            return result;
+        }
+
+        public async Task<MissionFormModel> GetMissionForEditByIdAsync(Guid missionId)
+        {
+            Mission? mission = await this.dbContext
+                .Missions
+                .Include(m => m.MissionType)
+                .FirstAsync(m => m.Id == missionId);
+
+            return new MissionFormModel
+            {
+                Title = mission.Title,
+                Location = mission.Location,
+                Description = mission.Description,
+                MissionThreatLevelId = mission.MissionThreatLevelId,
+                MissionTypeId = mission.MissionTypeId
+            };
+        }
+
+        public async Task<bool> isOrganizerWithIdCreatorOfMissionWithIdAsync(Guid missionId, Guid organizerId)
+        {
+            Mission mission = await this.dbContext
+                .Missions
+                .FirstAsync(m => m.Id == missionId);
+
+            return mission.OrganizerId == organizerId;
         }
     }
 }

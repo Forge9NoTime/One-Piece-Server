@@ -1,0 +1,14 @@
+﻿@model MissionFormModel
+@{
+    ViewData["Title"] = "Edit Mission";
+}
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr/>
+
+<partial name="MissionFormPartial" model="@Model"/>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
