@@ -35,7 +35,7 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All([FromQuery]AllMissionsQueryModel queryModel)
+        public async Task<IActionResult> All([FromQuery] AllMissionsQueryModel queryModel)
         {
             AllMissionsFilteredAndPagedServiceModel serviceModel =
                 await this.missionService.AllAsync(queryModel);
@@ -117,9 +117,11 @@
                 string? organizerId =
                     await this.organizerService.GetOrganizerIdByUserIdAsync(this.User.GetId()!);
 
-                await this.missionService.CreateAsync(model, organizerId!);
+                string missionId = await this.missionService.CreateAndReturnIdAsync(model, organizerId!);
+
+                return this.RedirectToAction("Details", "House", new { id = missionId });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 this.ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add a new mission! Please try again later or contact an administrator!");
@@ -130,7 +132,6 @@
                 return this.View(model);
             }
 
-            return this.RedirectToAction("All", "Mission");
         }
 
         [HttpGet]
@@ -208,16 +209,16 @@
                 return this.RedirectToAction("Become", "Agent");
             }
 
-            //Guid organizerId =
-            //    await this.organizerService.GetOrganizerIdByUserIdAsync(this.User.GetId()!;
-            //bool isOrganizerCreator = await this.missionService
-            //    .isOrganizerWithIdCreatorOfMissionWithIdAsync(id, organizerId!);
-            //if (!isOrganizerCreator)
-            //{
-            //    this.TempData[ErrorMessage] = "You must be the organizer of the mission you want to edit!";
+            string organizerId =
+                await this.organizerService.GetOrganizerIdByUserIdAsync(User.GetId()!);
+            bool isOrganizerCreator = await this.missionService
+                .isOrganizerWithIdCreatorOfMissionWithIdAsync(id, new Guid (organizerId)!);
+            if (!isOrganizerCreator)
+            {
+                this.TempData[ErrorMessage] = "You must be the organizer of the mission you want to edit!";
 
-            //    return this.RedirectToAction("Mine", "Mission");
-            //}
+                return this.RedirectToAction("Mine", "Mission");
+            }
 
             try
             {
@@ -245,7 +246,7 @@
 
             try
             {
-                await this.missionService.EditMissionByIdAndFormModel(id, model);
+                await this.missionService.EditMissionByIdAndFormModelAsync(id, model);
             }
             catch (Exception)
             {
@@ -254,7 +255,39 @@
                 model.ThreatLevels = await this.threatLevelService.ALlThreatLevelsAsync();
             }
 
-            return this.RedirectToAction("Details", "Mission", new {id});
-        } 
+            return this.RedirectToAction("Details", "Mission", new { id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            bool missionExists = await this.missionService
+                .ExistsByIdAsync(id);
+            if (!missionExists)
+            {
+                this.TempData[ErrorMessage] = "Mission with the provided id does not exist!";
+
+                return this.RedirectToAction("All", "Mission");
+            }
+
+            bool isUserOrganizer = await this.organizerService
+                .OrganizerExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserOrganizer)
+            {
+                this.TempData[ErrorMessage] = "You must become an organizer to edit house info!";
+
+                return this.RedirectToAction("Become", "Agent");
+            }
+
+            try
+            {
+                MissionPreDeleteDetailsViewModel viewModel = await this.missionService.GetMissionForDeleteByIdAsync(id.ToString());
+                return this.View(viewModel);
+            }
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
+        }
     }
 }

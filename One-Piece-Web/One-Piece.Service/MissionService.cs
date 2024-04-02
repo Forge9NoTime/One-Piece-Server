@@ -44,7 +44,7 @@
             return allMissions;
         }
 
-        public async Task CreateAsync(MissionFormModel formModel, string organizerId)
+        public async Task<string> CreateAndReturnIdAsync(MissionFormModel formModel, string organizerId)
         {
             Mission newMission = new Mission()
             {
@@ -58,47 +58,25 @@
 
             await this.dbContext.Missions.AddAsync(newMission);
             await this.dbContext.SaveChangesAsync();
+
+            return newMission.Id.ToString();
         }
 
         public async Task<AllMissionsFilteredAndPagedServiceModel> AllAsync(AllMissionsQueryModel queryModel)
         {
-            IQueryable<Mission> missionsQuery = this.dbContext
+            //IQueryable<Mission> missionsQuery = this.dbContext
+            //   .Missions
+            //   .AsQueryable();
+
+            ICollection<Mission> missionsQuery = await this.dbContext
                 .Missions
-                .AsQueryable();
+                .ToListAsync();
 
-            if (!string.IsNullOrWhiteSpace(queryModel.MissionType))
+
+            return new AllMissionsFilteredAndPagedServiceModel()
             {
-                missionsQuery = missionsQuery
-                    .Where(m => m.MissionType.TypeName == queryModel.MissionType);
-            }
-
-            if (!string.IsNullOrWhiteSpace(queryModel.SearchString))
-            {
-                string wildCard = $"%{queryModel.SearchString.ToLower()}%";
-
-                missionsQuery = missionsQuery
-                    .Where(m => EF.Functions.Like(m.Title, wildCard) ||
-                    EF.Functions.Like(m.Location, wildCard) ||
-                    EF.Functions.Like(m.Description, wildCard));
-            }
-
-            missionsQuery = queryModel.MissionSorting switch
-            {
-                MissionSorting.Newest => missionsQuery
-                .OrderByDescending(m => m.CreatedOn),
-                MissionSorting.Oldest => missionsQuery
-                .OrderBy(m => m.CreatedOn),
-                MissionSorting.ThreatLevelAscending => missionsQuery
-                .OrderBy(m => m.MissionThreatLevelId),
-                MissionSorting.ThreatLevelDescending => missionsQuery
-                .OrderByDescending(m => m.MissionThreatLevelId),
-                _ => missionsQuery
-                .OrderByDescending(m => m.CreatedOn)
-            };
-
-            IEnumerable<MissionAllViewModel> allMissions = await missionsQuery
-                .Skip((queryModel.CurrentPage - 1) * queryModel.MissionsPerPage)
-                .Take(queryModel.MissionsPerPage)
+                TotalMissionsCount = missionsQuery.Count,
+                Missions = missionsQuery
                 .Select(m => new MissionAllViewModel
                 {
                     Id = m.Id,
@@ -106,14 +84,51 @@
                     Location = m.Location,
                     Description = m.Description,
                 })
-                .ToArrayAsync();
-            int totalMissions = missionsQuery.Count();
-
-            return new AllMissionsFilteredAndPagedServiceModel()
-            {
-                TotalMissionsCount = totalMissions,
-                Missions = allMissions
+                .ToList()
             };
+
+            //if (!string.IsNullOrWhiteSpace(queryModel.MissionType))
+            //{
+            //    missionsQuery = missionsQuery
+            //        .Where(m => m.MissionType.TypeName == queryModel.MissionType);
+            //}
+
+            //if (!string.IsNullOrWhiteSpace(queryModel.SearchString))
+            //{
+            //    string wildCard = $"%{queryModel.SearchString.ToLower()}%";
+
+            //    missionsQuery = missionsQuery
+            //        .Where(m => EF.Functions.Like(m.Title, wildCard) ||
+            //        EF.Functions.Like(m.Location, wildCard) ||
+            //        EF.Functions.Like(m.Description, wildCard));
+            //}
+
+            //missionsQuery = queryModel.MissionSorting switch
+            //{
+            //    MissionSorting.Newest => missionsQuery
+            //    .OrderByDescending(m => m.CreatedOn),
+            //    MissionSorting.Oldest => missionsQuery
+            //    .OrderBy(m => m.CreatedOn),
+            //    MissionSorting.ThreatLevelAscending => missionsQuery
+            //    .OrderBy(m => m.MissionThreatLevelId),
+            //    MissionSorting.ThreatLevelDescending => missionsQuery
+            //    .OrderByDescending(m => m.MissionThreatLevelId),
+            //    _ => missionsQuery
+            //    .OrderByDescending(m => m.CreatedOn)
+            //};
+
+            //IEnumerable<MissionAllViewModel> allMissions = await missionsQuery
+            //    .Skip((queryModel.CurrentPage - 1) * queryModel.MissionsPerPage)
+            //    .Take(queryModel.MissionsPerPage)
+            //    .Select(m => new MissionAllViewModel
+            //    {
+            //        Id = m.Id,
+            //        Title = m.Title,
+            //        Location = m.Location,
+            //        Description = m.Description,
+            //    })
+            //    .ToArrayAsync();
+            //int totalMissions = missionsQuery.Count();
         }
 
         public async Task<IEnumerable<MissionAllViewModel>> AllByOrganizerIdAsync(string organizerId)
@@ -146,6 +161,7 @@
             {
                Id = mission.Id,
                Title = mission.Title,
+               Description = mission.Description,
                Location = mission.Location,
                MissionType = mission.MissionType.TypeName,
                Organizer = new OnePiece.Web.ViewModels.Organizer.OrganizerInfoOnHouseViewModel()
@@ -192,7 +208,7 @@
             return mission.OrganizerId == organizerId;
         }
 
-        public async Task EditMissionByIdAndFormModel(string missionId, MissionFormModel formModel)
+        public async Task EditMissionByIdAndFormModelAsync(string missionId, MissionFormModel formModel)
         {
             Mission mission = await this.dbContext
                 .Missions
@@ -205,6 +221,19 @@
             mission.MissionTypeId = formModel.MissionTypeId;
 
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<MissionPreDeleteDetailsViewModel> GetMissionForDeleteByIdAsync(string missionId)
+        {
+            Mission mission = await this.dbContext
+                .Missions
+                .FirstAsync(m => m.Id.ToString() == missionId);
+
+            return new MissionPreDeleteDetailsViewModel
+            {
+                Title = mission.Title,
+                Location = mission.Location
+            };
         }
     }
 }

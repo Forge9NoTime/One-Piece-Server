@@ -8,7 +8,7 @@
     {
         Task<IEnumerable<IndexViewModel>> AllMissionsAsync();
 
-        Task CreateAsync(MissionFormModel formModel, string organizerId);
+        Task<string> CreateAndReturnIdAsync(MissionFormModel formModel, string organizerId);
 
         Task<AllMissionsFilteredAndPagedServiceModel> AllAsync(AllMissionsQueryModel queryModel);
 
@@ -22,6 +22,8 @@
 
         Task<bool> isOrganizerWithIdCreatorOfMissionWithIdAsync(Guid missionId, Guid organizerId);
 
-        Task EditMissionByIdAndFormModel(string missionId, MissionFormModel formModel);
+        Task EditMissionByIdAndFormModelAsync(string missionId, MissionFormModel formModel);
+
+        Task<MissionPreDeleteDetailsViewModel> GetMissionForDeleteByIdAsync(string missionId);
     }
 }
