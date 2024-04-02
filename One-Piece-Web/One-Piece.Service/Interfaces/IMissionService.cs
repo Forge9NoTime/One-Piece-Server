@@ -21,5 +21,7 @@
         Task<MissionFormModel> GetMissionForEditByIdAsync(Guid missionId);
 
         Task<bool> isOrganizerWithIdCreatorOfMissionWithIdAsync(Guid missionId, Guid organizerId);
+
+        Task EditMissionByIdAndFormModel(string missionId, MissionFormModel formModel);
     }
 }

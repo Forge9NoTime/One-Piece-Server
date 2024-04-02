@@ -27,6 +27,12 @@
             this.organizerService = organizerService;
         }
 
+        private IActionResult GeneralError()
+        {
+            this.TempData[ErrorMessage] = "Unexpected error occurred! Please try again later or contact administrator!";
+            return this.RedirectToAction("Index", "Home");
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> All([FromQuery]AllMissionsQueryModel queryModel)
@@ -53,14 +59,21 @@
                 return this.RedirectToAction("Become", "Volunteer");
             }
 
-
-            MissionFormModel formModel = new MissionFormModel()
+            try
             {
-                ThreatLevels = await this.threatLevelService.ALlThreatLevelsAsync(),
-                MissionTypes = await this.missionTypeService.ALlMissionTypesAsync()
-            };
+                MissionFormModel formModel = new MissionFormModel()
+                {
+                    ThreatLevels = await this.threatLevelService.ALlThreatLevelsAsync(),
+                    MissionTypes = await this.missionTypeService.ALlMissionTypesAsync()
+                };
 
-            return View(formModel);
+                return View(formModel);
+            }
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
+
         }
 
         [HttpPost]
@@ -129,14 +142,22 @@
             string userId = this.User.GetId()!;
             bool isUserOrganizer = await this.organizerService
                 .OrganizerExistsByUserIdAsync(userId);
-            if (isUserOrganizer)
+
+            try
             {
-                string organizerId = await this.organizerService.GetOrganizerIdByUserIdAsync(userId);
+                if (isUserOrganizer)
+                {
+                    string organizerId = await this.organizerService.GetOrganizerIdByUserIdAsync(userId);
 
-                myMissions.AddRange(await this.missionService.AllByOrganizerIdAsync(organizerId));
+                    myMissions.AddRange(await this.missionService.AllByOrganizerIdAsync(organizerId));
+                }
+
+                return this.View(myMissions);
             }
-
-            return this.View(myMissions);
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
         }
 
         [HttpGet]
@@ -152,10 +173,18 @@
                 return this.RedirectToAction("All", "Mission");
             }
 
-            MissionDetailsViewModel viewModel = await this.missionService
+            try
+            {
+                MissionDetailsViewModel viewModel = await this.missionService
                 .GetDetailsByIdAsync(id);
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
+
         }
 
         [HttpGet]
@@ -190,12 +219,42 @@
             //    return this.RedirectToAction("Mine", "Mission");
             //}
 
-            MissionFormModel formModel = await this.missionService
+            try
+            {
+                MissionFormModel formModel = await this.missionService
                 .GetMissionForEditByIdAsync(id);
-            formModel.MissionTypes = await this.missionTypeService.ALlMissionTypesAsync();
-            formModel.ThreatLevels = await this.threatLevelService.ALlThreatLevelsAsync();
+                formModel.MissionTypes = await this.missionTypeService.ALlMissionTypesAsync();
+                formModel.ThreatLevels = await this.threatLevelService.ALlThreatLevelsAsync();
 
-            return this.View(formModel);
+                return this.View(formModel);
+            }
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
         }
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, MissionFormModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                model.MissionTypes = await this.missionTypeService.ALlMissionTypesAsync();
+                model.ThreatLevels = await this.threatLevelService.ALlThreatLevelsAsync();
+                return this.View(model);
+            }
+
+            try
+            {
+                await this.missionService.EditMissionByIdAndFormModel(id, model);
+            }
+            catch (Exception)
+            {
+                this.ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to update the mission. Please try again later or contact administrator!");
+                model.MissionTypes = await this.missionTypeService.ALlMissionTypesAsync();
+                model.ThreatLevels = await this.threatLevelService.ALlThreatLevelsAsync();
+            }
+
+            return this.RedirectToAction("Details", "Mission", new {id});
+        } 
     }
 }

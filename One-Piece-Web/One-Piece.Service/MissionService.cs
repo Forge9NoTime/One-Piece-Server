@@ -191,5 +191,20 @@
 
             return mission.OrganizerId == organizerId;
         }
+
+        public async Task EditMissionByIdAndFormModel(string missionId, MissionFormModel formModel)
+        {
+            Mission mission = await this.dbContext
+                .Missions
+                .FirstAsync(m => m.Id.ToString() == missionId);
+
+            mission.Title = formModel.Title;
+            mission.Location = formModel.Location;
+            mission.Description = formModel.Description;
+            mission.MissionThreatLevelId = formModel.MissionThreatLevelId;
+            mission.MissionTypeId = formModel.MissionTypeId;
+
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }
