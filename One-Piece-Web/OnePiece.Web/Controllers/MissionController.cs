@@ -204,9 +204,9 @@
                 .OrganizerExistsByUserIdAsync(this.User.GetId()!);
             if (!isUserOrganizer)
             {
-                this.TempData[ErrorMessage] = "You must become an organizer to edit house info!";
+                this.TempData[ErrorMessage] = "You are not the organizer of the mission!";
 
-                return this.RedirectToAction("Become", "Agent");
+                return this.RedirectToAction("All", "Mission");
             }
 
             string organizerId =
@@ -274,9 +274,9 @@
                 .OrganizerExistsByUserIdAsync(this.User.GetId()!);
             if (!isUserOrganizer)
             {
-                this.TempData[ErrorMessage] = "You must become an organizer to edit house info!";
+                this.TempData[ErrorMessage] = "You are not the organizer of the mission!";
 
-                return this.RedirectToAction("Become", "Agent");
+                return this.RedirectToAction("All", "Mission");
             }
 
             try
@@ -286,6 +286,39 @@
             }
             catch (Exception)
             {
+                return this.GeneralError();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id, MissionPreDeleteDetailsViewModel model)
+        {
+            bool missionExists = await this.missionService
+              .ExistsByIdAsync(id);
+            if (!missionExists)
+            {
+                this.TempData[ErrorMessage] = "Mission with the provided id does not exist!";
+
+                return this.RedirectToAction("All", "Mission");
+            }
+
+            bool isUserOrganizer = await this.organizerService
+                .OrganizerExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserOrganizer)
+            {
+                this.TempData[ErrorMessage] = "You are not the organizer of the mission!";
+
+                return this.RedirectToAction("All", "Mission");
+            }
+
+            try
+            {
+                await this.missionService.DeleteMissionByIdAsync(id);
+
+                return this.RedirectToAction("Mine", "Mission");
+            }
+            catch (Exception)
+            {
+
                 return this.GeneralError();
             }
         }

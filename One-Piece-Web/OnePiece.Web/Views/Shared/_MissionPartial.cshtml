@@ -7,11 +7,12 @@
             <h6>Location: <b>@Model.Location</b></h6>
             <br />
             <a asp-controller="Mission" asp-action="Details" asp-route-id="@Model.Id"
-               class="btn btn-success">Details</a>
+               class="btn btn-warning">Details</a>
             @if (this.User.Identity.IsAuthenticated)
             {
                 <a asp-controller="Mission" asp-action="Edit" asp-route-id="@Model.Id"
                class="btn btn-warning">Edit</a>
+                <p></p>
                 <a asp-controller="Mission" asp-action="Delete" asp-route-id="@Model.Id"
                class="btn btn-danger">Delete</a>
                 <p></p>

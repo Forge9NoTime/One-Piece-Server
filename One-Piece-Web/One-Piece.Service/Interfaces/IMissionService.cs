@@ -25,5 +25,7 @@
         Task EditMissionByIdAndFormModelAsync(string missionId, MissionFormModel formModel);
 
         Task<MissionPreDeleteDetailsViewModel> GetMissionForDeleteByIdAsync(string missionId);
+
+        Task DeleteMissionByIdAsync(Guid missionId);
     }
 }

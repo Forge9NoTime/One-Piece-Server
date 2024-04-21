@@ -235,5 +235,16 @@
                 Location = mission.Location
             };
         }
+
+        public async Task DeleteMissionByIdAsync(Guid missionId)
+        {
+            Mission missionToDelete = await this.dbContext
+                .Missions
+                .FirstAsync(m => m.Id == missionId);
+
+            dbContext.Remove(missionToDelete);
+                
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

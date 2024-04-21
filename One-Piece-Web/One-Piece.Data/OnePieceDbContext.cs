@@ -22,7 +22,6 @@
         }
 
         public DbSet<Volunteer> Volunteers { get; set; }
-        public DbSet<Transport> Transports { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<TeamType> TeamTypes { get; set; }
         public DbSet<Mission> Missions { get; set; }
@@ -31,6 +30,7 @@
         public DbSet<Organizer> Organizers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Item> Items { get; set; }
+        public DbSet<Transport> Transports { get; set; }
         public DbSet<ItemType> ItemTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
