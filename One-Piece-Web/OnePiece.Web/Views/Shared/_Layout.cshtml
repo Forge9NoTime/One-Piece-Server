@@ -1,4 +1,10 @@
-﻿@using static OnePiece.Common.GeneralApplicationConstants;
+﻿@using OnePiece.Web.Infrastructure.Extentions
+@using One_Piece.Service.Interfaces
+@using static OnePiece.Common.GeneralApplicationConstants;
+@inject IOrganizerService OrganizerService
+@{
+    bool isUserOrganizer = await OrganizerService.OrganizerExistsByUserIdAsync(this.User.GetId());
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,12 +32,15 @@
                         </li>
                         @if (this.User.Identity?.IsAuthenticated ?? false)
                         {
+                            @if (isUserOrganizer)
+                            {
+                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Mission" asp-action="Add">Add Mission</a>
+                            </li>   
+                            }
                             <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Mission" asp-action="Add">Add Mission</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Mission" asp-action="Mine">My Missions</a>
-                        </li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Mission" asp-action="Mine">My Missions</a>
+                            </li>
                         }
                     </ul>
                     <partial name="_LoginPartial" />
@@ -48,9 +57,10 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; OnePiece 2023
-            @if(DateTime.UtcNow.Year != ReleaseYear)
+            @if (DateTime.UtcNow.Year != ReleaseYear)
             {
-                @Html.Raw($" - {DateTime.UtcNow.Year}");
+                @Html.Raw($" - {DateTime.UtcNow.Year}")
+                ;
             }
         </div>
     </footer>

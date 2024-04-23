@@ -1,4 +1,13 @@
-﻿@model MissionAllViewModel
+﻿@using OnePiece.Web.Infrastructure.Extentions
+@using One_Piece.Service.Interfaces
+@inject IOrganizerService OrganizerService
+@{
+    ;
+    bool isUserOrganizer = await OrganizerService.OrganizerExistsByUserIdAsync(this.User.GetId());
+    bool isOrganizerCreaterOfTheMission = await OrganizerService.HasMissionWithIdAsync(this.User.GetId(), Model.Id.ToString());
+}
+
+@model MissionAllViewModel
 
 <div class="col-md-4">
     <div class="card mb-3">
@@ -7,14 +16,17 @@
             <h6>Location: <b>@Model.Location</b></h6>
             <br />
             <a asp-controller="Mission" asp-action="Details" asp-route-id="@Model.Id"
-               class="btn btn-warning">Details</a>
-            @if (this.User.Identity.IsAuthenticated)
+               class="btn btn-success">Details</a>
+            @if (this.User.Identity?.IsAuthenticated ?? false)
             {
-                <a asp-controller="Mission" asp-action="Edit" asp-route-id="@Model.Id"
+                @if (isUserOrganizer && isOrganizerCreaterOfTheMission)
+                {
+                    <a asp-controller="Mission" asp-action="Edit" asp-route-id="@Model.Id"
                class="btn btn-warning">Edit</a>
-                <p></p>
-                <a asp-controller="Mission" asp-action="Delete" asp-route-id="@Model.Id"
+                    <p></p>
+                    <a asp-controller="Mission" asp-action="Delete" asp-route-id="@Model.Id"
                class="btn btn-danger">Delete</a>
+                }
                 <p></p>
             }
         </div>

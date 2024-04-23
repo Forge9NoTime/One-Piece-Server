@@ -4,7 +4,7 @@
 
     public class OrganizerController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Become()
         {
             return View();
         }

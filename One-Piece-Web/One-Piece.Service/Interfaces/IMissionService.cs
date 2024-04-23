@@ -1,5 +1,6 @@
 ﻿namespace One_Piece.Service.Interfaces
 {
+    using One_Piece.Service.Statistics;
     using OnePiece.Services.Data.Models.Mission;
     using OnePiece.Web.ViewModels.Home;
     using OnePiece.Web.ViewModels.Mission;
@@ -27,5 +28,8 @@
         Task<MissionPreDeleteDetailsViewModel> GetMissionForDeleteByIdAsync(string missionId);
 
         Task DeleteMissionByIdAsync(Guid missionId);
+
+        Task<StatisticsServiceModel> GetStatisticsAsync();
+
     }
 }

@@ -1,4 +1,12 @@
-﻿@model MissionDetailsViewModel
+﻿@using OnePiece.Web.Infrastructure.Extentions
+@using One_Piece.Service.Interfaces
+@inject IOrganizerService OrganizerService
+@{
+    ;
+    bool isUserOrganizer = await OrganizerService.OrganizerExistsByUserIdAsync(this.User.GetId());
+    bool isOrganizerCreaterOfTheMission = await OrganizerService.HasMissionWithIdAsync(this.User.GetId(), Model.Id.ToString());
+}
+@model MissionDetailsViewModel
 @{
     ViewBag.Title = "Mission Details";
 }
@@ -14,10 +22,13 @@
             <div class="form-inline">
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-warning" asp-controller="Mission" aspaction="Edit"
+                    @if (isUserOrganizer && isOrganizerCreaterOfTheMission)
+                    {
+                        <a class="btn btn-warning" asp-controller="Mission" aspaction="Edit"
                    asp-route-id="@Model.Id">Edit</a>
-                    <a class="ml-2 btn btn-danger" asp-controller="Mission" aspaction="Delete"
+                        <a class="ml-2 btn btn-danger" asp-controller="Mission" aspaction="Delete"
                    asp-route-id="@Model.Id">Delete</a>
+                    }
                 }
             </div>
             <p></p>

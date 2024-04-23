@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnePiece.Web.Infrastructure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnePiece.Services.Data.Models.Mission", "OnePiece.Services.Data.Models.Mission\OnePiece.Services.Data.Models.Mission.csproj", "{31CC0F24-8995-4E5D-A378-3748E94D7A0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnePiece.WebAPI", "OnePiece.WebAPI\OnePiece.WebAPI.csproj", "{3D5C3548-9BBC-490C-8557-F98CF8CC56EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{31CC0F24-8995-4E5D-A378-3748E94D7A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31CC0F24-8995-4E5D-A378-3748E94D7A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31CC0F24-8995-4E5D-A378-3748E94D7A0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D5C3548-9BBC-490C-8557-F98CF8CC56EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D5C3548-9BBC-490C-8557-F98CF8CC56EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D5C3548-9BBC-490C-8557-F98CF8CC56EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D5C3548-9BBC-490C-8557-F98CF8CC56EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{9D1EAE7A-6ACF-491D-AE2A-3C333EC4EED4} = {38BFE13C-1007-4B60-B1F9-BF86940D5722}
 		{52961936-228B-447C-B530-C509F785366F} = {38BFE13C-1007-4B60-B1F9-BF86940D5722}
 		{31CC0F24-8995-4E5D-A378-3748E94D7A0E} = {3CBE32E2-0840-4375-B7B8-0C94E474C1C3}
+		{3D5C3548-9BBC-490C-8557-F98CF8CC56EE} = {38BFE13C-1007-4B60-B1F9-BF86940D5722}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D6552FE6-1437-4857-ACCA-2D95B9D0BB05}

@@ -1,4 +1,11 @@
-﻿@model IEnumerable<IndexViewModel>
+﻿@using OnePiece.Web.Infrastructure.Extentions
+@using One_Piece.Service.Interfaces
+@using static OnePiece.Common.GeneralApplicationConstants;
+@inject IOrganizerService OrganizerService
+@{
+    bool isUserOrganizer = await OrganizerService.OrganizerExistsByUserIdAsync(this.User.GetId());
+}
+@model IEnumerable<IndexViewModel>
 @{
     ViewData["Title"] = "Home Page";
     var missions = Model.ToList();
@@ -12,8 +19,29 @@
     <hr class="my-4">
     <a asp-controller="Mission" asp-action="All"
        class="btn btn-success">Missions</a>
-    @if (User.Identity?.IsAuthenticated ?? false)
+    @if (isUserOrganizer)
     {
         <a asp-controller="Mission" asp-action="Add" class="btn btn-success">Add Mission</a>
     }
 </div>
+
+<div class="mb-5"></div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-primary" id="statistics_btn">Show Statistics</button>
+    </div>
+</div>
+
+<div class="mt-4 p-5 bg-light d-none" id="statistics_box">
+    <div class="row">
+        <h2 class="col-md-6 text-center" id="total_missions"></h2>
+        <h2 class="col-md-6 text-center" id="total_teams"></h2>
+        <h3 class="col-md-6 text-center" id="high_threat_missions"></h3>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>statistics();</script>
+}

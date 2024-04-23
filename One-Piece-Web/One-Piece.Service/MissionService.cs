@@ -12,6 +12,7 @@
     using OnePiece.Services.Data.Models.Mission;
     using OnePiece.Web.ViewModels.Mission.Enums;
     using System.ComponentModel.DataAnnotations;
+    using One_Piece.Service.Statistics;
 
     public class MissionService : IMissionService
     {
@@ -245,6 +246,18 @@
             dbContext.Remove(missionToDelete);
                 
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<StatisticsServiceModel> GetStatisticsAsync()
+        {
+            return new StatisticsServiceModel()
+            {
+                TotalMissions = await this.dbContext.Missions.CountAsync(),
+                TotalTeams = await this.dbContext.Teams.CountAsync(),
+                HighThreatMissions = await this.dbContext.Missions
+                .Where(m => m.MissionThreatLevelId == 4)
+                .CountAsync()
+            };
         }
     }
 }

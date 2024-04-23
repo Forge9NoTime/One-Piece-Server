@@ -53,7 +53,7 @@
 
             await this.volunteerService.Create(userId, model);
 
-            return this.RedirectToAction("All", "Missions");
+            return this.RedirectToAction("All", "Mission");
         }
     }
 }

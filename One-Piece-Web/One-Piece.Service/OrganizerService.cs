@@ -4,6 +4,7 @@
     using One_Piece.Data;
     using One_Piece.Data.Models;
     using One_Piece.Service.Interfaces;
+    using System;
     using System.Threading.Tasks;
 
     public class OrganizerService : IOrganizerService
@@ -26,6 +27,19 @@
             }
 
             return organizer.Id.ToString();
+        }
+
+        public async Task<bool> HasMissionWithIdAsync(string organizerId, string missionId)
+        {
+            Organizer? organizer = await this.dbContext
+                .Organizers
+                .FirstOrDefaultAsync(o => o.Id.ToString() == organizerId);
+            if (organizer == null)
+            {
+                return false;
+            }
+
+            return organizer.CreatedMissions.Any(m => m.Id.ToString() == missionId); 
         }
 
         public async Task<bool> OrganizerExistsByUserIdAsync(string userId)

@@ -5,5 +5,7 @@
        Task<string> GetOrganizerIdByUserIdAsync(string userId);
 
        Task<bool> OrganizerExistsByUserIdAsync(string userId);
+
+        Task<bool> HasMissionWithIdAsync(string organizerId, string missionId);
     }
 }

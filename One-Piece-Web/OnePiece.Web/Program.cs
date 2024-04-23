@@ -1,5 +1,6 @@
 namespace OnePiece.Web
 {
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
     using One_Piece.Data;
@@ -40,7 +41,10 @@ namespace OnePiece.Web
 
             builder.Services.AddApplicationServices(typeof(IMissionService));
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
 
             WebApplication app = builder.Build();
 
