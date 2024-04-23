@@ -22,6 +22,7 @@
             Organizer newOrganizer = new Organizer()
             {
                 UserId = Guid.Parse(userId),
+                PhoneNumber = model.PhoneNumber,
                 EGN = model.EGN,
                 PlaceOfResidence = model.PlaceOfResidence,
                 AffiliatedOrganization = model.AffiliatedOrganization

@@ -6,6 +6,10 @@
     public class BecomeOrganizerFormModel
     {
         [Required]
+        [Display(Name = "Phone Number")]
+        [StringLength(MaxOrganizerPhoneNumberLenght, MinimumLength = MinOrganizerPhoneNumberLenght)]
+        public string PhoneNumber { get; set; } = null!;
+        [Required]
         [Display(Name = "ЕГН")]
         [StringLength(ExactEGNLenght)]
         public string EGN { get; set; } = null!;

@@ -26,6 +26,9 @@
 
             public const int AffiliatedOrganizationMinLenght = 5;
             public const int AffiliatedOrganizationMaxLenght = 100;
+
+            public const int MinOrganizerPhoneNumberLenght = 10;
+            public const int MaxOrganizerPhoneNumberLenght = 13;
         }
 
         public static class Team

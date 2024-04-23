@@ -119,7 +119,7 @@
 
                 string missionId = await this.missionService.CreateAndReturnIdAsync(model, organizerId!);
 
-                return this.RedirectToAction("Details", "House", new { id = missionId });
+                return this.RedirectToAction("Details", "Mission", new { id = missionId });
             }
             catch (Exception)
             {
