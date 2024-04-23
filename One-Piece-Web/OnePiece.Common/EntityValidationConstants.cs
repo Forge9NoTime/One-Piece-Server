@@ -18,6 +18,14 @@
         {
             public const int MinPhoneNumberLenght = 10;
             public const int MaxPhoneNumberLenght = 13;
+
+            public const int ExactEGNLenght = 10;
+
+            public const int PlaceOfResidencyMinLenght = 5;
+            public const int PlaceOfResidencyMaxLenght = 100;
+
+            public const int AffiliatedOrganizationMinLenght = 5;
+            public const int AffiliatedOrganizationMaxLenght = 100;
         }
 
         public static class Team
