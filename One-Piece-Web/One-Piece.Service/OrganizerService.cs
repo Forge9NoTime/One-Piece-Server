@@ -20,6 +20,7 @@
         {
             Organizer? organizer = await this.dbContext
                 .Organizers
+                .Include(o => o.CreatedMissions)
                 .FirstOrDefaultAsync(o => o.UserId.ToString() == userId);
             if (organizer == null)
             {
@@ -29,11 +30,11 @@
             return organizer.Id.ToString();
         }
 
-        public async Task<bool> HasMissionWithIdAsync(string organizerId, string missionId)
+        public async Task<bool> HasMissionWithIdAsync(string userId, string missionId)
         {
             Organizer? organizer = await this.dbContext
                 .Organizers
-                .FirstOrDefaultAsync(o => o.Id.ToString() == organizerId);
+                .FirstOrDefaultAsync(o => o.UserId.ToString() == userId);
             if (organizer == null)
             {
                 return false;

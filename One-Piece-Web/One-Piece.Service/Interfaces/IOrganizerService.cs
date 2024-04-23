@@ -6,6 +6,6 @@
 
        Task<bool> OrganizerExistsByUserIdAsync(string userId);
 
-        Task<bool> HasMissionWithIdAsync(string organizerId, string missionId);
+        Task<bool> HasMissionWithIdAsync(string userId, string missionId);
     }
 }

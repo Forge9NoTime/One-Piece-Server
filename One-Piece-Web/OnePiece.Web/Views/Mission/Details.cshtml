@@ -24,9 +24,9 @@
                 {
                     @if (isUserOrganizer && isOrganizerCreaterOfTheMission)
                     {
-                        <a class="btn btn-warning" asp-controller="Mission" aspaction="Edit"
+                        <a class="btn btn-warning" asp-controller="Mission" asp-action="Edit"
                    asp-route-id="@Model.Id">Edit</a>
-                        <a class="ml-2 btn btn-danger" asp-controller="Mission" aspaction="Delete"
+                        <a class="ml-2 btn btn-danger" asp-controller="Mission" asp-action="Delete"
                    asp-route-id="@Model.Id">Delete</a>
                     }
                 }

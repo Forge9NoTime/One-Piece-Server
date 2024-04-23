@@ -15,7 +15,7 @@
         public Guid UserId { get; set; }
         public ApplicationUser User { get; set; } = null!;
 
-        public ICollection<Mission>? CreatedMissions { get; set; }
+        public ICollection<Mission>? CreatedMissions { get; set; } = null!;
 
 
     }
