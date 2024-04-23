@@ -29,9 +29,6 @@
         public Guid? TeamId { get; set; }
         public Team? Team { get; set; }
 
-        public Guid? TransportId { get; set; }
-        public Transport? Transport { get; set; }
-
         public Guid UserId { get; set; }
         public ApplicationUser User { get; set; } = null!;
     }

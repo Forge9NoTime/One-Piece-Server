@@ -27,7 +27,5 @@
 
         public ICollection<Volunteer>? Volunteers { get; set; }
 
-        public ICollection<Transport>? Transports { get; set; }
-
     }
 }

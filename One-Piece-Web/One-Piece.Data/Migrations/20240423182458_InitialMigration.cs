@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace One_Piece.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,19 +51,16 @@ namespace One_Piece.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemTypes",
+                name: "MissionThreatLevels",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ItemTypes", x => x.Id);
+                    table.PrimaryKey("PK_MissionThreatLevels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,11 +202,14 @@ namespace One_Piece.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Organizer",
+                name: "Organizers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EGN = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    PlaceOfResidence = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AffiliatedOrganization = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -218,35 +218,11 @@ namespace One_Piece.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organizer", x => x.Id);
+                    table.PrimaryKey("PK_Organizers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Organizer_AspNetUsers_UserId",
+                        name: "FK_Organizers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Items",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ItemTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Items", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Items_ItemTypes_ItemTypeId",
-                        column: x => x.ItemTypeId,
-                        principalTable: "ItemTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -258,8 +234,8 @@ namespace One_Piece.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ThreatLevel = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    MissionThreatLevelId = table.Column<int>(type: "int", nullable: false),
                     MissionTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganizerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -271,45 +247,21 @@ namespace One_Piece.Data.Migrations
                 {
                     table.PrimaryKey("PK_Missions", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Missions_MissionThreatLevels_MissionThreatLevelId",
+                        column: x => x.MissionThreatLevelId,
+                        principalTable: "MissionThreatLevels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Missions_MissionTypes_MissionTypeId",
                         column: x => x.MissionTypeId,
                         principalTable: "MissionTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Missions_Organizer_OrganizerId",
+                        name: "FK_Missions_Organizers_OrganizerId",
                         column: x => x.OrganizerId,
-                        principalTable: "Organizer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Orders_Missions_MissionId",
-                        column: x => x.MissionId,
-                        principalTable: "Missions",
+                        principalTable: "Organizers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -322,7 +274,7 @@ namespace One_Piece.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     MembersCount = table.Column<int>(type: "int", nullable: false),
                     TeamTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -335,8 +287,7 @@ namespace One_Piece.Data.Migrations
                         name: "FK_Teams_Missions_MissionId",
                         column: x => x.MissionId,
                         principalTable: "Missions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Teams_TeamTypes_TeamTypeId",
                         column: x => x.TeamTypeId,
@@ -354,8 +305,7 @@ namespace One_Piece.Data.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TransportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -375,37 +325,6 @@ namespace One_Piece.Data.Migrations
                         name: "FK_Volunteers_Teams_TeamId",
                         column: x => x.TeamId,
                         principalTable: "Teams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Transports",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AvailableSpots = table.Column<int>(type: "int", nullable: false),
-                    LicensePlate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VolunteerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transports", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transports_Teams_TeamId",
-                        column: x => x.TeamId,
-                        principalTable: "Teams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Transports_Volunteers_VolunteerId",
-                        column: x => x.VolunteerId,
-                        principalTable: "Volunteers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -450,9 +369,9 @@ namespace One_Piece.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_ItemTypeId",
-                table: "Items",
-                column: "ItemTypeId");
+                name: "IX_Missions_MissionThreatLevelId",
+                table: "Missions",
+                column: "MissionThreatLevelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Missions_MissionTypeId",
@@ -465,18 +384,8 @@ namespace One_Piece.Data.Migrations
                 column: "OrganizerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ItemId",
-                table: "Orders",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_MissionId",
-                table: "Orders",
-                column: "MissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Organizer_UserId",
-                table: "Organizer",
+                name: "IX_Organizers_UserId",
+                table: "Organizers",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -488,17 +397,6 @@ namespace One_Piece.Data.Migrations
                 name: "IX_Teams_TeamTypeId",
                 table: "Teams",
                 column: "TeamTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transports_TeamId",
-                table: "Transports",
-                column: "TeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transports_VolunteerId",
-                table: "Transports",
-                column: "VolunteerId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Volunteers_TeamId",
@@ -530,22 +428,10 @@ namespace One_Piece.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Transports");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Items");
-
-            migrationBuilder.DropTable(
                 name: "Volunteers");
 
             migrationBuilder.DropTable(
-                name: "ItemTypes");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Teams");
@@ -557,10 +443,13 @@ namespace One_Piece.Data.Migrations
                 name: "TeamTypes");
 
             migrationBuilder.DropTable(
+                name: "MissionThreatLevels");
+
+            migrationBuilder.DropTable(
                 name: "MissionTypes");
 
             migrationBuilder.DropTable(
-                name: "Organizer");
+                name: "Organizers");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

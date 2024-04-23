@@ -5,6 +5,7 @@ namespace OnePiece.Web
 
     using One_Piece.Data;
     using One_Piece.Data.Models;
+    using One_Piece.Data.Seeder;
     using One_Piece.Service.Interfaces;
     using OnePiece.Web.Infrastructure.Extentions;
 
@@ -47,6 +48,16 @@ namespace OnePiece.Web
             });
 
             WebApplication app = builder.Build();
+
+            using (var serviceScope = app.Services.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<OnePieceDbContext>();
+                dbContext.Database.Migrate();
+                new Seeder()
+                    .SeedDatabase(dbContext)
+                    .GetAwaiter()
+                    .GetResult();
+            }
 
             if (app.Environment.IsDevelopment())
             {

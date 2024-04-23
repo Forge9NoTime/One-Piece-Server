@@ -4,6 +4,7 @@
     using One_Piece.Data;
     using One_Piece.Data.Models;
     using One_Piece.Service.Interfaces;
+    using OnePiece.Web.ViewModels.Organizer;
     using System;
     using System.Threading.Tasks;
 
@@ -15,6 +16,21 @@
         {
             this.dbContext = dbContext;
         }
+
+        public async Task Create(string userId, BecomeOrganizerFormModel model)
+        {
+            Organizer newOrganizer = new Organizer()
+            {
+                UserId = Guid.Parse(userId),
+                EGN = model.EGN,
+                PlaceOfResidence = model.PlaceOfResidence,
+                AffiliatedOrganization = model.AffiliatedOrganization
+            };
+
+            await this.dbContext.Organizers.AddAsync(newOrganizer);
+            await this.dbContext.SaveChangesAsync();
+        }
+
 
         public async Task<string> GetOrganizerIdByUserIdAsync(string userId)
         {
@@ -40,7 +56,7 @@
                 return false;
             }
 
-            return organizer.CreatedMissions.Any(m => m.Id.ToString() == missionId); 
+            return organizer.CreatedMissions.Any(m => m.Id.ToString() == missionId);
         }
 
         public async Task<bool> OrganizerExistsByUserIdAsync(string userId)
@@ -53,3 +69,4 @@
         }
     }
 }
+

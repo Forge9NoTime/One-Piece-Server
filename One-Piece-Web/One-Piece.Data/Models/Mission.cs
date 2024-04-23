@@ -36,7 +36,5 @@
 
         public ICollection<Team>? Teams { get; set; }
 
-        public ICollection<Order>? Orders { get; set; }
-
     }
 }

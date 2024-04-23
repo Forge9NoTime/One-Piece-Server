@@ -219,69 +219,6 @@ namespace One_Piece.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("One_Piece.Data.Models.Item", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ItemTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemTypeId");
-
-                    b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("One_Piece.Data.Models.ItemType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ItemTypes");
-                });
-
             modelBuilder.Entity("One_Piece.Data.Models.Mission", b =>
                 {
                     b.Property<Guid>("Id")
@@ -349,7 +286,7 @@ namespace One_Piece.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MissionThreatLevel");
+                    b.ToTable("MissionThreatLevels");
                 });
 
             modelBuilder.Entity("One_Piece.Data.Models.MissionType", b =>
@@ -379,53 +316,26 @@ namespace One_Piece.Data.Migrations
                     b.ToTable("MissionTypes");
                 });
 
-            modelBuilder.Entity("One_Piece.Data.Models.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("MissionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("MissionId");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("One_Piece.Data.Models.Organizer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AffiliatedOrganization")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("EGN")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -437,6 +347,10 @@ namespace One_Piece.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PlaceOfResidence")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -444,7 +358,7 @@ namespace One_Piece.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Organizer");
+                    b.ToTable("Organizers");
                 });
 
             modelBuilder.Entity("One_Piece.Data.Models.Team", b =>
@@ -515,48 +429,6 @@ namespace One_Piece.Data.Migrations
                     b.ToTable("TeamTypes");
                 });
 
-            modelBuilder.Entity("One_Piece.Data.Models.Transport", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AvailableSpots")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LicensePlate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("TeamId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("VolunteerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeamId");
-
-                    b.HasIndex("VolunteerId")
-                        .IsUnique()
-                        .HasFilter("[VolunteerId] IS NOT NULL");
-
-                    b.ToTable("Transports");
-                });
-
             modelBuilder.Entity("One_Piece.Data.Models.Volunteer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -592,9 +464,6 @@ namespace One_Piece.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("TeamId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TransportId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
@@ -660,17 +529,6 @@ namespace One_Piece.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("One_Piece.Data.Models.Item", b =>
-                {
-                    b.HasOne("One_Piece.Data.Models.ItemType", "ItemType")
-                        .WithMany()
-                        .HasForeignKey("ItemTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ItemType");
-                });
-
             modelBuilder.Entity("One_Piece.Data.Models.Mission", b =>
                 {
                     b.HasOne("One_Piece.Data.Models.MissionThreatLevel", "MissionThreatLevel")
@@ -686,7 +544,7 @@ namespace One_Piece.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("One_Piece.Data.Models.Organizer", "Organizer")
-                        .WithMany()
+                        .WithMany("CreatedMissions")
                         .HasForeignKey("OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -696,25 +554,6 @@ namespace One_Piece.Data.Migrations
                     b.Navigation("MissionType");
 
                     b.Navigation("Organizer");
-                });
-
-            modelBuilder.Entity("One_Piece.Data.Models.Order", b =>
-                {
-                    b.HasOne("One_Piece.Data.Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("One_Piece.Data.Models.Mission", "Mission")
-                        .WithMany("Orders")
-                        .HasForeignKey("MissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Mission");
                 });
 
             modelBuilder.Entity("One_Piece.Data.Models.Organizer", b =>
@@ -745,23 +584,6 @@ namespace One_Piece.Data.Migrations
                     b.Navigation("TeamType");
                 });
 
-            modelBuilder.Entity("One_Piece.Data.Models.Transport", b =>
-                {
-                    b.HasOne("One_Piece.Data.Models.Team", "Team")
-                        .WithMany("Transports")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("One_Piece.Data.Models.Volunteer", "Volunteer")
-                        .WithOne("Transport")
-                        .HasForeignKey("One_Piece.Data.Models.Transport", "VolunteerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Team");
-
-                    b.Navigation("Volunteer");
-                });
-
             modelBuilder.Entity("One_Piece.Data.Models.Volunteer", b =>
                 {
                     b.HasOne("One_Piece.Data.Models.Team", "Team")
@@ -782,8 +604,6 @@ namespace One_Piece.Data.Migrations
 
             modelBuilder.Entity("One_Piece.Data.Models.Mission", b =>
                 {
-                    b.Navigation("Orders");
-
                     b.Navigation("Teams");
                 });
 
@@ -792,16 +612,14 @@ namespace One_Piece.Data.Migrations
                     b.Navigation("Missions");
                 });
 
-            modelBuilder.Entity("One_Piece.Data.Models.Team", b =>
+            modelBuilder.Entity("One_Piece.Data.Models.Organizer", b =>
                 {
-                    b.Navigation("Transports");
-
-                    b.Navigation("Volunteers");
+                    b.Navigation("CreatedMissions");
                 });
 
-            modelBuilder.Entity("One_Piece.Data.Models.Volunteer", b =>
+            modelBuilder.Entity("One_Piece.Data.Models.Team", b =>
                 {
-                    b.Navigation("Transport");
+                    b.Navigation("Volunteers");
                 });
 #pragma warning restore 612, 618
         }
