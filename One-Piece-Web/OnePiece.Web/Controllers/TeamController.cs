@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using One_Piece.Service.Interfaces;
+    using OnePiece.Services.Data.Models.Mission;
     using OnePiece.Web.Infrastructure.Extentions;
     using OnePiece.Web.ViewModels.Team;
     using static OnePiece.Common.NotificationMessagesConstants;
@@ -14,13 +15,15 @@
         private readonly IVolunteerService volunteerService;
         private readonly ITeamTypeService teamTypeService;
         private readonly IOrganizerService organizerService;
+        private readonly IMissionService missionService;
 
-        public TeamController(ITeamService teamService, IVolunteerService volunteerService, ITeamTypeService teamTypeService, IOrganizerService organizerService)
+        public TeamController(ITeamService teamService, IVolunteerService volunteerService, ITeamTypeService teamTypeService, IOrganizerService organizerService, IMissionService missionService)
         {
             this.teamService = teamService;
             this.volunteerService = volunteerService;
             this.teamTypeService = teamTypeService;
             this.organizerService = organizerService;
+            this.missionService = missionService;
         }
         private IActionResult GeneralError()
         {
@@ -44,6 +47,7 @@
             {
                 TeamFormModel formModel = new TeamFormModel()
                 {
+                    Missions = await this.missionService.AllMissionsAsync(),
                     TeamTypes = await this.teamTypeService.AllTeamTypesAsync()
                 };
 
@@ -79,6 +83,7 @@
             if (!ModelState.IsValid)
             {
                 model.TeamTypes = await this.teamTypeService.AllTeamTypesAsync();
+                model.Missions = await this.missionService.AllMissionsAsync();
 
                 return this.View(model);
             }
@@ -98,6 +103,7 @@
                 this.ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add a new team! Please try again later or contact an administrator!");
 
                 model.TeamTypes = await this.teamTypeService.AllTeamTypesAsync();
+                model.Missions = await this.missionService.AllMissionsAsync();
 
                 return this.View(model);
             }
@@ -129,6 +135,19 @@
                 return this.GeneralError();
             }
 
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> All([FromQuery] TeamsAllQueryModel queryModel)
+        {
+            AllTeams serviceModel =
+                await this.teamService.AllTeamsAsync(queryModel);
+
+
+            queryModel.Teams = serviceModel.Teams.ToList();
+            queryModel.TeamTypes = await this.teamTypeService.AllTeamTypeNamesAsync();
+            return this.View(queryModel);
         }
     }
 }

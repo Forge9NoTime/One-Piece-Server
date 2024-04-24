@@ -1,0 +1,19 @@
+﻿@using OnePiece.Web.ViewModels.Team
+@model TeamsAllQueryModel
+
+@{
+    ViewBag.Title = "All Teams";
+}
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+@if (!Model.Teams.Any())
+{
+    <h2 class="text-center">No teams found!</h2>
+}
+<div class="row">
+    @foreach (var team in Model.Teams)
+    {
+        <partial name="_TeamPartial" model="@team" />
+    }
+</div>

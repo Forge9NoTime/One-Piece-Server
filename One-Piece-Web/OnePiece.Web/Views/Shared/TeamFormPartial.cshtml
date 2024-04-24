@@ -19,6 +19,16 @@
                     </select>
                     <span asp-validation-for="TeamTypeId" class="small textdanger"></span>
                 </div>
+                 <div class="form-group">
+                    <label asp-for="MissionId"></label>
+                    <select asp-for="MissionId" class="form-control">
+                        @foreach (var mission in Model.Missions)
+                        {
+                            <option value="@mission.Id">@mission.Title</option>
+                        }
+                    </select>
+                    <span asp-validation-for="MissionId" class="small textdanger"></span>
+                </div>
                 <div class="text-center">
                     <input class="btn btn-primary mt-3" type="submit" value="Save" />
                 </div>

@@ -39,7 +39,7 @@
         {
             AllMissionsFilteredAndPagedServiceModel serviceModel =
                 await this.missionService.AllAsync(queryModel);
-
+            
 
             queryModel.Missions = serviceModel.Missions;
             queryModel.TotalMissionsCount = serviceModel.TotalMissionsCount;

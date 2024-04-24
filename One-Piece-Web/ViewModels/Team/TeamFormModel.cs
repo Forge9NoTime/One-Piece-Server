@@ -1,5 +1,7 @@
 ﻿namespace OnePiece.Web.ViewModels.Team
 {
+    using OnePiece.Web.ViewModels.Home;
+    using OnePiece.Web.ViewModels.Mission;
     using OnePiece.Web.ViewModels.TeamType;
     using System.ComponentModel.DataAnnotations;
 
@@ -10,6 +12,7 @@
         public TeamFormModel()
         {
             this.TeamTypes = new HashSet<TeamSelectTypeFormModel>();
+            this.Missions = new HashSet<IndexViewModel>();
         }
 
         [Required]
@@ -19,6 +22,11 @@
 
         [Display(Name = "Team Type")]
         public Guid TeamTypeId { get; set; }
+
+        [Display(Name = "Mission")]
+        public Guid MissionId { get; set; }
         public IEnumerable<TeamSelectTypeFormModel> TeamTypes { get; set; }
+
+        public IEnumerable<IndexViewModel> Missions { get; set; }
     }
 }

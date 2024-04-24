@@ -17,6 +17,7 @@
         <div class="card col-8 border-0">
             <p style="font-size:25px;"><u>@Model.Name</u></p>
             <p>Team Type: <b>@Model.TeamType</b></p>
+            <p>Mission: <a href="@Url.Action("Details", "Mission", new { id = Model.MissionId })"><b>@Model.MissionTitle</b></a></p>
             <div class="form-inline">
                 @if (this.User.Identity.IsAuthenticated)
                 {

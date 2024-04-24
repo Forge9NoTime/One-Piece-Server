@@ -65,9 +65,6 @@
 
         public async Task<AllMissionsFilteredAndPagedServiceModel> AllAsync(AllMissionsQueryModel queryModel)
         {
-            //IQueryable<Mission> missionsQuery = this.dbContext
-            //   .Missions
-            //   .AsQueryable();
 
             ICollection<Mission> missionsQuery = await this.dbContext
                 .Missions
