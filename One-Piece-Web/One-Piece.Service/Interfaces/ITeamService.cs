@@ -23,5 +23,9 @@
         Task<TeamFormModel> GetTeamForEditByIdAsync(Guid teamId);
 
         Task EditTeamByIdAndFormModelAsync(string teamId, TeamFormModel formModel);
+
+        Task DeleteTeamByIdAsync(Guid teamId);
+
+        Task<TeamPreDeleteDetailsViewModel> GetTeamForDeleteByIdAsync(Guid teamId);
     }
 }

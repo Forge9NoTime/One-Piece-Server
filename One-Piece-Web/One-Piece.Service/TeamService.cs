@@ -6,6 +6,7 @@
     using One_Piece.Service.Interfaces;
     using OnePiece.Services.Data.Models.Mission;
     using OnePiece.Web.ViewModels.Team;
+    using OnePiece.Web.ViewModels.Volunteer;
 
     public class TeamService : ITeamService
     {
@@ -42,6 +43,7 @@
         {
             Team? team = await this.dbContext
                 .Teams
+                .Include(t => t.Volunteers)
                 .Include(t => t.Mission)
                 .Include(t => t.TeamType)
                 .Include(t => t.Organizer)
@@ -59,7 +61,11 @@
                 {
                     Email = team.Organizer.User.Email,
                     PhoneNumber = team.Organizer.PhoneNumber
-                }
+                },
+                Volunteers = team.Volunteers.Select(x => new VolunteerViewModel
+                {
+                    FullName = x.FullName
+                }).ToList()
             };
         }
         public async Task<AllTeams> AllTeamsAsync(TeamsAllQueryModel queryModel)
@@ -152,6 +158,39 @@
 
 
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteTeamByIdAsync(Guid teamId)
+        {
+            Team? team = await this.dbContext
+                .Teams
+                .FirstOrDefaultAsync(t => t.Id == teamId);
+
+            if (team == null)
+            {
+                return;
+            }
+
+            this.dbContext.Teams.Remove(team);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<TeamPreDeleteDetailsViewModel> GetTeamForDeleteByIdAsync(Guid teamId)
+        {
+            var team = await this.dbContext
+                 .Teams
+                 .Include(t => t.Mission)
+                 .Include(t => t.TeamType)
+                 .Select(t => new TeamPreDeleteDetailsViewModel
+                 {
+                     Id = t.Id,
+                     Name = t.Name,
+                     MissionName = t.Mission.Title,
+                     TeamType = t.TeamType.TypeName
+                 })
+                 .FirstOrDefaultAsync(t => t.Id == teamId);
+
+            return team;
         }
     }    
 } 

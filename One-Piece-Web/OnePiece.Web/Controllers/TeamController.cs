@@ -235,7 +235,7 @@
             {
                 this.TempData[ErrorMessage] = "You must be the organizer of the mission you want to edit!";
 
-                return this.RedirectToAction("Mine", "Team");
+                return this.RedirectToAction("All", "Team");
             }
 
             try
@@ -274,6 +274,71 @@
             }
 
             return this.RedirectToAction("Details", "Team", new { id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            bool teamExists = await this.teamService
+                .ExistsByIdAsync(id);
+            if (!teamExists)
+            {
+                this.TempData[ErrorMessage] = "Team with the provided id does not exist!";
+
+                return this.RedirectToAction("All", "Team");
+            }
+
+            bool isUserOrganizer = await this.organizerService
+                .OrganizerExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserOrganizer)
+            {
+                this.TempData[ErrorMessage] = "You are not the organizer of the team!";
+
+                return this.RedirectToAction("All", "Team");
+            }
+
+            try
+            {
+                TeamPreDeleteDetailsViewModel viewModel = await this.teamService.GetTeamForDeleteByIdAsync(id);
+                return this.View(viewModel);
+            }
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id, TeamPreDeleteDetailsViewModel model)
+        {
+            bool teamExists = await this.teamService
+              .ExistsByIdAsync(id);
+            if (!teamExists)
+            {
+                this.TempData[ErrorMessage] = "Team with the provided id does not exist!";
+
+                return this.RedirectToAction("All", "Team");
+            }
+
+            bool isUserOrganizer = await this.organizerService
+                .OrganizerExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserOrganizer)
+            {
+                this.TempData[ErrorMessage] = "You are not the organizer of the team!";
+
+                return this.RedirectToAction("All", "Team");
+            }
+
+            try
+            {
+                await this.teamService.DeleteTeamByIdAsync(id);
+
+                return this.RedirectToAction("All", "Team");
+            }
+            catch (Exception)
+            {
+
+                return this.GeneralError();
+            }
         }
     }
 }
