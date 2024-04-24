@@ -11,7 +11,7 @@
     public class Team : AuditableEntity
     {
         [Required]
-        [MaxLength(NameMaxLenght)]
+        [StringLength(NameMaxLenght, MinimumLength = NameMinLenght)]
         public string Name { get; set; } = null!;
 
         [Required]
@@ -24,6 +24,10 @@
         [ForeignKey("Mission")]
         public Guid? MissionId { get; set; }
         public Mission? Mission { get; set; }
+
+        [ForeignKey("Organizer")]
+        public Guid OrganizerId { get; set; }
+        public Organizer Organizer { get; set; } = null!;
 
         public ICollection<Volunteer>? Volunteers { get; set; }
 
