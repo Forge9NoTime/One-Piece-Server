@@ -149,5 +149,131 @@
             queryModel.TeamTypes = await this.teamTypeService.AllTeamTypeNamesAsync();
             return this.View(queryModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Join()
+        {
+            var user = this.User.GetId();
+
+            if (user == null)
+            {
+                return this.View("Error400");
+            }
+
+            try
+            {
+                JoinTeamFormModel formModel = new JoinTeamFormModel()
+                {
+                    Teams = await this.teamService.GetAllTeamsAsync()
+                };
+
+                return View(formModel);
+            }
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Join(JoinTeamFormModel model)
+        {
+            var userId = this.User.GetId();
+
+            if (userId == null)
+            {
+                return this.View("Error400");
+            }
+
+            try
+            {
+                model.Teams = await this.teamService.GetAllTeamsAsync();
+
+                if (!ModelState.IsValid)
+                {
+                    return this.View(model);
+                }
+
+                await this.teamService.JoinTeamAsync(new Guid(model.TeamId), new Guid(userId));
+
+                return this.RedirectToAction("Details", "Team", new { id = model.TeamId });
+
+            }
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id, TeamFormModel model)
+        {
+            bool teamExists = await this.teamService
+                .ExistsByIdAsync(id);
+            if (!teamExists)
+            {
+                this.TempData[ErrorMessage] = "Team with the provided id does not exist!";
+
+                return this.RedirectToAction("All", "Team");
+            }
+
+            bool isUserOrganizer = await this.organizerService
+                .OrganizerExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserOrganizer)
+            {
+                this.TempData[ErrorMessage] = "You are not the organizer of the team!";
+
+                return this.RedirectToAction("All", "Team");
+            }
+
+            string organizerId =
+                await this.organizerService.GetOrganizerIdByUserIdAsync(User.GetId()!);
+            bool isOrganizerCreator = await this.teamService
+                .isOrganizerWithIdCreatorOfTeamWithIdAsync(id, new Guid(organizerId)!);
+            if (!isOrganizerCreator)
+            {
+                this.TempData[ErrorMessage] = "You must be the organizer of the mission you want to edit!";
+
+                return this.RedirectToAction("Mine", "Team");
+            }
+
+            try
+            {
+                TeamFormModel formModel = await this.teamService
+                .GetTeamForEditByIdAsync(id);
+                formModel.TeamTypes = await this.teamTypeService.AllTeamTypesAsync();
+                formModel.Missions = await this.missionService.AllMissionsAsync();
+
+                return this.View(formModel);
+            }
+            catch (Exception)
+            {
+                return this.GeneralError();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, TeamFormModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                model.TeamTypes = await this.teamTypeService.AllTeamTypesAsync();
+                model.Missions = await this.missionService.AllMissionsAsync();
+                return this.View(model);
+            }
+
+            try
+            {
+                await this.teamService.EditTeamByIdAndFormModelAsync(id, model);
+            }
+            catch (Exception)
+            {
+                this.ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to update the team. Please try again later or contact administrator!");
+                model.TeamTypes = await this.teamTypeService.AllTeamTypesAsync();
+                model.Missions = await this.missionService.AllMissionsAsync();
+            }
+
+            return this.RedirectToAction("Details", "Team", new { id });
+        }
     }
 }

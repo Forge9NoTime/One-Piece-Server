@@ -46,6 +46,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Team" asp-action="All">All Teams</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Team" asp-action="Join">Join Team</a>
+                        </li>
                         @if (this.User.Identity?.IsAuthenticated ?? false)
                         {
                             @if (isUserOrganizer)

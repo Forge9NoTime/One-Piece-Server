@@ -1,0 +1,26 @@
+﻿@using OnePiece.Web.ViewModels.Team
+@model JoinTeamFormModel
+@{
+    <div class="row">
+        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+            <form method="post">
+                 <div class="form-group">
+                    <label asp-for="TeamId"></label>
+                    <select asp-for="TeamId" class="form-control">
+                        @foreach (var team in Model.Teams)
+                        {
+                            <option value="@team.Id">@team.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="TeamId" class="small textdanger"></span>
+                </div>
+                <div class="text-center">
+                    <input class="btn btn-primary mt-3" type="submit" value="Join" />
+                </div>
+            </form>
+        </div>
+    </div>
+    @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+}

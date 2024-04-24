@@ -1,0 +1,16 @@
+﻿@using OnePiece.Web.ViewModels.Team
+@model JoinTeamFormModel
+@{
+    ViewData["Title"] = "Join Team";
+}
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+
+<hr/>
+
+<partial name="JoinTeamFormPartial" model="@Model"/>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

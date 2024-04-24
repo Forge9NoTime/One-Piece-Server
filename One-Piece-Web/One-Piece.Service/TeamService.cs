@@ -82,5 +82,76 @@
                 .ToList()
             };
         }
+
+        public async Task JoinTeamAsync(Guid teamId, Guid userId)
+        {
+            var team = await this.dbContext.Teams
+                .Include(x => x.Volunteers)
+                .FirstOrDefaultAsync(x => x.Id == teamId);
+            var volunteer = await this.dbContext.Volunteers.FirstOrDefaultAsync(x => x.UserId == userId);
+
+            if (team == null || volunteer == null)
+            {
+                //to do throw exception
+                return;
+            }
+
+            team.Volunteers.Add(volunteer);
+            this.dbContext.Teams.Update(team);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<TeamAllViewModel>> GetAllTeamsAsync()
+        {
+            return await this.dbContext.Teams
+                .Include(x => x.Mission)
+                .Select(x => new TeamAllViewModel
+                {
+                    Id = x.Id,
+                    MissionTitle = x.Mission.Title,
+                    MissionId = x.MissionId.ToString(),
+                    Name = x.Name,
+                    MembersCount = x.MembersCount
+                })
+                .ToListAsync();
+        }
+
+        public async Task<bool> isOrganizerWithIdCreatorOfTeamWithIdAsync(Guid teamId, Guid organizerId)
+        {
+            Team team = await this.dbContext
+                .Teams
+                .FirstAsync(t => t.Id == teamId);
+
+            return team.OrganizerId == organizerId;
+        }
+
+        public async Task<TeamFormModel> GetTeamForEditByIdAsync(Guid teamId)
+        {
+            Team? team = await this.dbContext
+                .Teams
+                .Include(t => t.TeamType)
+                .FirstAsync(t => t.Id == teamId);
+
+            return new TeamFormModel
+            {
+                Name = team.Name,
+                TeamTypeId = team.TeamTypeId,
+                MissionId = team.MissionId,
+            };
+        }
+
+        public async Task EditTeamByIdAndFormModelAsync(string teamId, TeamFormModel formModel)
+        {
+            Team team = await this.dbContext
+                .Teams
+                .FirstAsync(t => t.Id.ToString() == teamId);
+
+            team.Name = formModel.Name;
+            team.TeamTypeId = formModel.TeamTypeId;
+            team.MissionId = formModel.MissionId;
+
+
+            await this.dbContext.SaveChangesAsync();
+        }
     }    
 } 

@@ -12,6 +12,16 @@
 
         Task<string> CreateAndReturnIdAsync(TeamFormModel formModel, string organizerId);
 
+        Task<bool> isOrganizerWithIdCreatorOfTeamWithIdAsync(Guid teamId, Guid organizerId);
+
         Task<AllTeams> AllTeamsAsync(TeamsAllQueryModel queryModel);
+
+        Task<ICollection<TeamAllViewModel>> GetAllTeamsAsync();
+
+        Task JoinTeamAsync(Guid teamId, Guid userId);
+
+        Task<TeamFormModel> GetTeamForEditByIdAsync(Guid teamId);
+
+        Task EditTeamByIdAndFormModelAsync(string teamId, TeamFormModel formModel);
     }
 }
