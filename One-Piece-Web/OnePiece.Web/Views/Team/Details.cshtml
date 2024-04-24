@@ -1,0 +1,42 @@
+﻿@using OnePiece.Web.Infrastructure.Extentions
+@using OnePiece.Web.ViewModels.Team
+@using One_Piece.Service.Interfaces
+@inject IOrganizerService OrganizerService
+@{
+    bool isUserOrganizer = await OrganizerService.OrganizerExistsByUserIdAsync(this.User.GetId());
+    bool isOrganizerCreaterOfTheTeam = await OrganizerService.HasTeamWithIdAsync(this.User.GetId(), Model.Id.ToString());
+}
+@model TeamDetailsViewModel
+@{
+    ViewBag.Title = "Team Details";
+}
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="container" style="display:inline">
+    <div class="row">
+        <div class="card col-8 border-0">
+            <p style="font-size:25px;"><u>@Model.Name</u></p>
+            <p>Team Type: <b>@Model.TeamType</b></p>
+            <div class="form-inline">
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    @if (isUserOrganizer && isOrganizerCreaterOfTheTeam)
+                    {
+                        <a class="btn btn-warning" asp-controller="Team" asp-action="Edit"
+                   asp-route-id="@Model.Id">Edit</a>
+                        <a class="ml-2 btn btn-danger" asp-controller="Team" asp-action="Delete"
+                   asp-route-id="@Model.Id">Delete</a>
+                    }
+                }
+            </div>
+            <p></p>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Organizer Info</h5>
+                    <p class="card-text">Email: @Model.Organizer.Email</p>
+                    <p class="card-text">Phone Number: @Model.Organizer.PhoneNumber</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

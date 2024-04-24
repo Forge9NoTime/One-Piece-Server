@@ -25,6 +25,8 @@
 
         public ICollection<Mission>? CreatedMissions { get; set; } = null!;
 
+        public ICollection<Team>? CreatedTeams { get; set; } = null!;
+
 
     }
 }

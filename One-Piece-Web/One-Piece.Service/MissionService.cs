@@ -165,7 +165,7 @@
                Description = mission.Description,
                Location = mission.Location,
                MissionType = mission.MissionType.TypeName,
-               Organizer = new OnePiece.Web.ViewModels.Organizer.OrganizerInfoOnHouseViewModel()
+               Organizer = new OnePiece.Web.ViewModels.Organizer.OrganizerInfoOnMissionViewModel()
                {
                    Email = mission.Organizer.User.Email,
                    PhoneNumber = mission.Organizer.PhoneNumber

@@ -6,6 +6,6 @@
     {
         public string MissionType { get; set; } = null!;
 
-        public OrganizerInfoOnHouseViewModel Organizer { get; set; } = null!;
+        public OrganizerInfoOnMissionViewModel Organizer { get; set; } = null!;
     }
 }

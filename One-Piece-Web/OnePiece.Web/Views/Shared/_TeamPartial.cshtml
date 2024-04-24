@@ -1,0 +1,32 @@
+﻿@using OnePiece.Web.Infrastructure.Extentions
+@using OnePiece.Web.ViewModels.Team
+@using One_Piece.Service.Interfaces
+@inject IOrganizerService OrganizerService
+@{
+    bool isUserOrganizer = await OrganizerService.OrganizerExistsByUserIdAsync(this.User.GetId());
+    bool isOrganizerCreaterOfTheTeam = await OrganizerService.HasTeamWithIdAsync(this.User.GetId(), Model.Id.ToString());
+}
+
+@model TeamAllViewModel
+
+<div class="col-md-4">
+    <div class="card mb-3">
+        <div class="card-body text-center">
+            <h4>@Model.Name</h4>
+            <br />
+            <a asp-controller="Team" asp-action="Details" asp-route-id="@Model.Id"
+               class="btn btn-success">Details</a>
+            @if (this.User.Identity?.IsAuthenticated ?? false)
+            {
+                @if (isUserOrganizer && isOrganizerCreaterOfTheTeam)
+                {
+                    <a asp-controller="Team" asp-action="Edit" asp-route-id="@Model.Id"
+               class="btn btn-warning">Edit</a>
+                    <a asp-controller="Team" asp-action="Delete" asp-route-id="@Model.Id"
+               class="btn btn-danger">Delete</a>
+                }
+                <p></p>
+            }
+        </div>
+    </div>
+</div>

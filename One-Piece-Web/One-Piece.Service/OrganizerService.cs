@@ -60,6 +60,19 @@
             return organizer.CreatedMissions.Any(m => m.Id.ToString() == missionId);
         }
 
+        public async Task<bool> HasTeamWithIdAsync(string userId, string teamId)
+        {
+            Organizer? organizer = await this.dbContext
+                .Organizers
+                .FirstOrDefaultAsync(o => o.UserId.ToString() == userId);
+            if (organizer == null)
+            {
+                return false;
+            }
+
+            return organizer.CreatedTeams.Any(t => t.Id.ToString() == teamId);
+        }
+
         public async Task<bool> OrganizerExistsByUserIdAsync(string userId)
         {
             bool result = await this.dbContext

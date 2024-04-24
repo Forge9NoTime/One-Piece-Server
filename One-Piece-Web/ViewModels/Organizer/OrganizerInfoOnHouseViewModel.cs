@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class OrganizerInfoOnHouseViewModel
+    public class OrganizerInfoOnMissionViewModel
     {
         public string Email { get; set; } = null!;
 
